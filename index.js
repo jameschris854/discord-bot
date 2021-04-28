@@ -1,13 +1,7 @@
-require("dotenv").config();
-const Discord = require("discord.js");
 const random = require("random");
-const bot = new Discord.Client();
-const TOKEN = process.env.TOKEN;
 const Scraper = require("images-scraper");
-
-// const translate = require('translate')
-const hangmanMessageHandler = require('./message handlers/hangmanMessageHandler')
-// const translate =require("./translator")
+const bot = require('./server')
+const hangmanMessageHandler = require('./messagehandlers/hangmanMessageHandler')
 
 const vennuQuotes = [
   "Hey are U going to Sing ???",
@@ -36,11 +30,11 @@ const wilburQuotes = [
 
 //DISCORD SECTION
 
-bot.login(TOKEN);
-//bot ready and logged in
-bot.on("ready", () => {
-  console.info(`Logged in as ${bot.user.tag}!`);
-});
+// bot.login(TOKEN);
+// //bot ready and logged in
+// bot.on("ready", () => {
+//   console.info(`Logged in as ${bot.user.tag}!`);
+// });
 
 //bot on any message event in the server
 
