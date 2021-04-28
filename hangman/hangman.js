@@ -1,4 +1,5 @@
-exports.hangman = async (msg,movieName,movieImg,id) => {
+
+exports.hangmanLogic = async (msg,movieName,movieImg,id) => {
     let filter = (m) => m.author.id === id;
     let moviePre = await movieName.toUpperCase();
     let movie = moviePre.split("");
