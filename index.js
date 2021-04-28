@@ -2,6 +2,7 @@ const random = require("random");
 const Scraper = require("images-scraper");
 const bot = require('./server')
 const hangmanMessageHandler = require('./messagehandlers/hangmanMessageHandler')
+const lbMessageHandler = require('./messagehandlers/lbMessageHandler')
 
 const vennuQuotes = [
   "Hey are U going to Sing ???",
@@ -13,6 +14,7 @@ const vennuQuotes = [
   "I am a Brain Eater...",
   "I am a Heart Stealer...",
 ];
+
 const wilburQuotes = [
   "first class ???",
   "wilbur mode..",
@@ -40,7 +42,7 @@ const wilburQuotes = [
 
 bot.on("message", async (msg) => {
   // let filter = m => m.author.id === msg.author.id
-
+  lbMessageHandler.isDbCreated(msg.guild.id)
   //vennu***wilbur***
   if (msg.content === "vennu" || msg.content == "wilbur") {
     let No = random.int((min = 0), (max = 40));
@@ -78,5 +80,34 @@ bot.on("message", async (msg) => {
     let filter = (m) => m.author.id === msg.author.id;
     hangmanMessageHandler.hangmanMessageHandler(msg,filter)
     ///////////////////////////////////INITIATE HANGMAN/////////////////////////
+  }
+  else if (msg.content === "dbcheck" ){
+    console.log('checking db');
+    let data = {
+      _guildId:'766137401687939999',
+    guildMembers:{
+      'james':'200'
+      ,'loki':'500'
+    }
+    }
+    lbMessageHandler.createTestGuild(data)
+  }
+  else if (msg.content.toLowerCase() === "score me" ){
+    lbMessageHandler.singleUserScore('abcdefg','james')
+  }
+  else if (msg.content.toLowerCase() === "update me"){
+    lbMessageHandler.updateUserScore('766137401687932958','james')
+  }else if(msg.content.toLowerCase() === "leaderboard")
+  {
+    console.log(msg.guild.id);
+    let members =await  lbMessageHandler.showLeaderBoard('766137401687932958')
+    let lbMembers = ''
+    members.map(member => {
+      lbMembers = lbMembers + `${member[0]}:${member[1]} \n`
+    })
+    msg.channel.send(`leaderboard details\n ${lbMembers}`)
+  }
+  else if (msg.content.toLowerCase() === "add me" ){
+    lbMessageHandler.updateUserScore(msg.guild.id,msg.author.id,20)
   }
 })
