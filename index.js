@@ -84,7 +84,7 @@ bot.on("message", async (msg) => {
   else if (msg.content === "dbcheck" ){
     console.log('checking db');
     let data = {
-      _guildId:'766137401687939999',
+      _guildId:`${msg.guild.id}`,
     guildMembers:{
       'james':'200'
       ,'loki':'500'
@@ -92,22 +92,46 @@ bot.on("message", async (msg) => {
     }
     lbMessageHandler.createTestGuild(data)
   }
-  else if (msg.content.toLowerCase() === "score me" ){
-    lbMessageHandler.singleUserScore('abcdefg','james')
+  else if (msg.content.toLowerCase() === "score me" )
+  {
+    let userScore =await lbMessageHandler.singleUserScore(msg.guild.id,msg.author.id)
+    msg.channel.send(`${msg.author.username} : ${userScore}`)
   }
-  else if (msg.content.toLowerCase() === "update me"){
+  else if (msg.content.toLowerCase() === "update me")
+  {
     lbMessageHandler.updateUserScore('766137401687932958','james')
-  }else if(msg.content.toLowerCase() === "leaderboard")
+  }
+  else if(msg.content.toLowerCase() === "leaderboard")
   {
     console.log(msg.guild.id);
-    let members =await  lbMessageHandler.showLeaderBoard('766137401687932958')
+    let members = await  lbMessageHandler.showLeaderBoard(msg.guild.id)
     let lbMembers = ''
-    members.map(member => {
-      lbMembers = lbMembers + `${member[0]}:${member[1]} \n`
-    })
+    for(let i =0 ;i<members.length;i++){
+      console.log(members[i][0]);
+      currentUser = await bot.fetchUser(members[i][0])
+      currentUserName = currentUser.username
+      members[i][0] = currentUserName
+      lbMembers = lbMembers + ` ${members[i][0]}:${members[i][1]} \n`
+    }
+
+
+    // members.map( member => {
+    //   console.log(member);
+    //   // currentUser = await bot.fetchUser(member[0])
+    //   // currentUserName = currentUser.username
+    //   // console.log(currentUserName,member[1]);
+    //   lbMembers = lbMembers + ` ${member[0]}:${member[1]} \n`
+    //   // console.log(lbMembers);
+    // })
     msg.channel.send(`leaderboard details\n ${lbMembers}`)
   }
-  else if (msg.content.toLowerCase() === "add me" ){
+  else if (msg.content.toLowerCase() === "add me" )
+  {
     lbMessageHandler.updateUserScore(msg.guild.id,msg.author.id,20)
+  }
+  else if(msg.content.toLowerCase() === "win" )
+  {
+    console.log(random.int((min=1),(max=10)));
+    lbMessageHandler.updateUserScore(msg.guild.id,msg.author.id,5)
   }
 })

@@ -1,4 +1,4 @@
-
+const lbMessageHandler = require('../messagehandlers/lbMessageHandler')
 exports.hangmanLogic = async (msg,movieName,movieImg,id) => {
     let filter = (m) => m.author.id === id;
     let moviePre = await movieName.toUpperCase();
@@ -77,6 +77,7 @@ exports.hangmanLogic = async (msg,movieName,movieImg,id) => {
         );
         if (movieName.toUpperCase() === ans.toString().replace(/,/g, "")) {
           win = true;
+          lbMessageHandler.updateUserScore(msg.guild.id,msg.author.id,tries,'win')
           msg.channel.send(
             `${movieName.toUpperCase()} is Right!👑\n🏅Winner winner wilbur dinner🏅 \n ${movieImg}`
           );
@@ -90,6 +91,7 @@ exports.hangmanLogic = async (msg,movieName,movieImg,id) => {
     clearInterval(interval);
 
     if (win === false) {
+      lbMessageHandler.updateUserScore(msg.guild.id,msg.author.id,tries,'lost')
       msg.channel.send(
         `⚰️better luck next time 🫂 \n The right answer is ${movieName.toUpperCase()} \n ${movieImg}`
       );
