@@ -1,7 +1,7 @@
 const mongoose = require('mongoose');
-const { findOneAndUpdate } = require('../leaderBoard/leaderBoardSchema');
+const { findOneAndUpdate } = require('../model/leaderBoardSchema');
 
-const lbSchema = require('../leaderBoard/leaderBoardSchema')
+const lbSchema = require('../model/leaderBoardSchema')
 
 exports.isDbCreated = async(guildId) => {
     let data = await lbSchema.findOne({_guildId:guildId})
@@ -26,7 +26,7 @@ exports.showLeaderBoard = async (guildId) => {
     let data = await lbSchema.findOne({_guildId:guildId})
     console.log('show leaderboard');
 
-    return Object.entries(data.guildMembers)
+    return [Object.entries(data.guildMembers),data]
 }
 
 

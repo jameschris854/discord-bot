@@ -3,7 +3,8 @@ const Scraper = require("images-scraper");
 const bot = require('./server')
 const hangmanMessageHandler = require('./messagehandlers/hangmanMessageHandler')
 const lbMessageHandler = require('./messagehandlers/lbMessageHandler')
-
+const Discord= require('discord.js');
+const messageEmbeds = require('./model/messageEmbeds')
 const vennuQuotes = [
   "Hey are U going to Sing ???",
   "Its My Life..",
@@ -95,7 +96,7 @@ bot.on("message", async (msg) => {
   else if (msg.content.toLowerCase() === "score me" )
   {
     let userScore =await lbMessageHandler.singleUserScore(msg.guild.id,msg.author.id)
-    msg.channel.send(`${msg.author.username} : ${userScore}`)
+    messageEmbeds.singleUserData(msg,userScore)
   }
   else if (msg.content.toLowerCase() === "update me")
   {
@@ -104,26 +105,29 @@ bot.on("message", async (msg) => {
   else if(msg.content.toLowerCase() === "leaderboard")
   {
     console.log(msg.guild.id);
-    let members = await  lbMessageHandler.showLeaderBoard(msg.guild.id)
-    let lbMembers = ''
+    let members= (await  lbMessageHandler.showLeaderBoard(msg.guild.id))[0]
+    let oriData = (await lbMessageHandler.showLeaderBoard(msg.guild.id))[1]
+    let userNames = ''
+    let score = ''
+    scores = []  
+
+    console.log(members);
     for(let i =0 ;i<members.length;i++){
-      console.log(members[i][0]);
-      currentUser = await bot.fetchUser(members[i][0])
-      currentUserName = currentUser.username
-      members[i][0] = currentUserName
-      lbMembers = lbMembers + ` ${members[i][0]}:${members[i][1]} \n`
-    }
+          scores.push(members[i][1])
+          console.log(scores);
+          console.log(members[i][0]);
+          currentUser = await bot.fetchUser(members[i][0])
+          currentUserName = currentUser.username
+          members[i][0] = currentUserName
+          userNames += `\`${i + 1}\`   ${members[i][0]}\n`;
+          score += `\`${members[i][1]}\`\n`;
+        }
+        scores.sort(function(a, b){return b - a})
 
+        console.log(oriData);
+      console.log('final data'+userNames,score);
+      messageEmbeds.leaderBoardEmbed(userNames,score,msg)
 
-    // members.map( member => {
-    //   console.log(member);
-    //   // currentUser = await bot.fetchUser(member[0])
-    //   // currentUserName = currentUser.username
-    //   // console.log(currentUserName,member[1]);
-    //   lbMembers = lbMembers + ` ${member[0]}:${member[1]} \n`
-    //   // console.log(lbMembers);
-    // })
-    msg.channel.send(`leaderboard details\n ${lbMembers}`)
   }
   else if (msg.content.toLowerCase() === "add me" )
   {
@@ -134,4 +138,8 @@ bot.on("message", async (msg) => {
     console.log(random.int((min=1),(max=10)));
     lbMessageHandler.updateUserScore(msg.guild.id,msg.author.id,5)
   }
+  else if(msg.content.toLowerCase() === "help" ){
+    messageEmbeds.helpMessage(msg)
+  }
+
 })
