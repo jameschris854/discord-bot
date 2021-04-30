@@ -114,7 +114,6 @@ bot.on("message", async (msg) => {
     console.log(members);
     for(let i =0 ;i<members.length;i++){
           scores.push(members[i][1])
-          console.log(scores);
           console.log(members[i][0]);
           currentUser = await bot.fetchUser(members[i][0])
           currentUserName = currentUser.username
@@ -123,6 +122,7 @@ bot.on("message", async (msg) => {
           score += `\`${members[i][1]}\`\n`;
         }
         scores.sort(function(a, b){return b - a})
+        console.log(scores);
 
         console.log(oriData);
       console.log('final data'+userNames,score);
