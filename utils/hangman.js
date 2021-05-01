@@ -1,4 +1,6 @@
 const lbMessageHandler = require('../messagehandlers/lbMessageHandler')
+const messageEmbeds = require('../model/messageEmbeds')
+
 exports.hangmanLogic = async (msg,movieName,movieImg,id) => {
     let filter = (m) => m.author.id === id;
     let moviePre = await movieName.toUpperCase();
@@ -78,24 +80,19 @@ exports.hangmanLogic = async (msg,movieName,movieImg,id) => {
         if (movieName.toUpperCase() === ans.toString().replace(/,/g, "")) {
           win = true;
           lbMessageHandler.updateUserScore(msg.guild.id,msg.author.id,tries,'win')
-          msg.channel.send(
-            `${movieName.toUpperCase()} is Right!👑\n🏅Winner winner wilbur dinner🏅 \n ${movieImg}`
-          );
-          msg.channel.send("⏯️To start a new game use the command *hangman*");
+          messageEmbeds.textFileEmbed(msg,`${movieName.toUpperCase()} is Right!👑`,`🏅Winner winner wilbur dinner🏅\n ⏯️To start a new game use the command hangman`,`${movieImg}`)
         }
       } catch (err) {
-        msg.channel.send(`🚫Time exceeded the answer is |*${movieName}|*🚫 \n ${movieImg}`);
+        console.log(err);
+        messageEmbeds.textFileEmbed(msg,`🚫Time exceeded🚫`,`the answer is : ${movieName.toUpperCase()}`,`${movieImg}`)
         return clearInterval(interval);
       }
     }
     clearInterval(interval);
 
     if (win === false) {
-      lbMessageHandler.updateUserScore(msg.guild.id,msg.author.id,tries,'lostn ')
-      msg.channel.send(
-        `⚰️better luck next time 🫂 \n The right answer is ${movieName.toUpperCase()} \n ${movieImg}`
-      );
-      msg.channel.send("⏯️To start a new game use the command *hangman*");
+      lbMessageHandler.updateUserScore(msg.guild.id,msg.author.id,tries,'lost')
+      messageEmbeds.TextFileEmbed(msg,`⚰️better luck next time 🫂`,`The right answer is ${movieName.toUpperCase()} \n  ⏯️To start a new game use the command hangman`,`${movieImg}`)
     }
   };
 

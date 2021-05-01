@@ -117,3 +117,37 @@ exports.singleUserData = (msg,score) => {
   }
 })
 }
+
+
+exports.simpleTextEmbed = (msg,name,value,) => {
+  return msg.channel.send({embed:{
+    fields:[
+      {name:name,value:value,inline:false},
+    ]  
+  }
+})
+}
+
+
+exports.textFileEmbed = (msg,name,value,fileUrl) => {
+  return msg.channel.send({embed:{
+    image:  {
+      url: `${fileUrl}`
+  }, 
+    fields:[
+      {name:name,value:value,inline:false},
+    ]  
+  }
+})
+}
+
+exports.urlFileEmbed = (msg,name,value,locFile) => {
+  return msg.channel.send({embed:{
+    image:  {
+      url: `attachment://${extendUrl}`
+  }, 
+    fields:[
+      {name:name,value:value,inline:false},
+    ]  
+  },files:[`${locFile}`]})
+}
