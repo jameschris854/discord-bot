@@ -2,9 +2,12 @@ const random = require("random");
 const Scraper = require("images-scraper");
 const bot = require('./server')
 const hangmanMessageHandler = require('./messagehandlers/hangmanMessageHandler')
-const lbMessageHandler = require('./messagehandlers/lbMessageHandler')
-const Discord= require('discord.js');
+const lbMessageHandler = require('./messagehandlers/lbMessageHandler');
 const messageEmbeds = require('./model/messageEmbeds')
+const configMessageHandler = require('./messagehandlers/cofigMessageHandler')
+
+
+
 const vennuQuotes = [
   "Hey are U going to Sing ???",
   "Its My Life..",
@@ -30,20 +33,16 @@ const wilburQuotes = [
   "Cobra to the right",
   "Say Cobra Cobra",
 ];
-
-//DISCORD SECTION
-
-// bot.login(TOKEN);
-// //bot ready and logged in
-// bot.on("ready", () => {
-//   console.info(`Logged in as ${bot.user.tag}!`);
-// });
-
-//bot on any message event in the server
-
 bot.on("message", async (msg) => {
+  try{
+    prefix  = await configMessageHandler.getGuildPrefix(msg.guild.id)
+    console.log(prefix);
+  }catch(err){
+    prefix = '-'
+    console.log('error caught');
+  }
+  
   // let filter = m => m.author.id === msg.author.id
-  lbMessageHandler.isDbCreated(msg.guild.id)
   //vennu***wilbur***
   if (msg.content === "vennu" || msg.content == "wilbur") {
     let No = random.int((min = 0), (max = 40));
@@ -77,10 +76,10 @@ bot.on("message", async (msg) => {
   }
 
   ////////////////////////////////// HANGMAN /////////////////////////
-  else if (msg.content.toLowerCase() === "hangman") {
+  else if (msg.content.toLowerCase() === `${prefix}hangman`) {
+    lbMessageHandler.isDbCreated(msg.guild.id)
     let filter = (m) => m.author.id === msg.author.id;
-    hangmanMessageHandler.hangmanMessageHandler(msg,filter)
-    ///////////////////////////////////INITIATE HANGMAN/////////////////////////
+    hangmanMessageHandler.hangmanMessageHandler(msg,filter,prefix);
   }
   else if (msg.content === "dbcheck" ){
     console.log('checking db');
@@ -93,40 +92,19 @@ bot.on("message", async (msg) => {
     }
     lbMessageHandler.createTestGuild(data)
   }
-  else if (msg.content.toLowerCase() === "score me" )
+  else if (msg.content.toLowerCase() === `${prefix}score me` )
   {
+    lbMessageHandler.isDbCreated(msg.guild.id)
     let userScore =await lbMessageHandler.singleUserScore(msg.guild.id,msg.author.id)
     messageEmbeds.singleUserData(msg,userScore)
   }
-  else if (msg.content.toLowerCase() === "update me")
-  {
-    lbMessageHandler.updateUserScore('766137401687932958','james')
-  }
-  else if(msg.content.toLowerCase() === "leaderboard")
-  {
+  else if(msg.content.toLowerCase() === `${prefix}leaderboard`)
+  {  
+    console.log('leaderboard');
+    lbMessageHandler.isDbCreated(msg.guild.id)
     console.log(msg.guild.id);
-    let members= (await  lbMessageHandler.showLeaderBoard(msg.guild.id))[0]
-    let oriData = (await lbMessageHandler.showLeaderBoard(msg.guild.id))[1]
-    let userNames = ''
-    let score = ''
-    scores = []  
-
-    console.log(members);
-    for(let i =0 ;i<members.length;i++){
-          scores.push(members[i][1])
-          console.log(members[i][0]);
-          currentUser = await bot.fetchUser(members[i][0])
-          currentUserName = currentUser.username
-          members[i][0] = currentUserName
-          userNames += `\`${i + 1}\`   ${members[i][0]}\n`;
-          score += `\`${members[i][1]}\`\n`;
-        }
-        scores.sort(function(a, b){return b - a})
-        console.log(scores);
-
-        console.log(oriData);
-      console.log('final data'+userNames,score);
-      messageEmbeds.leaderBoardEmbed(userNames,score,msg)
+    let data  = await lbMessageHandler.showLeaderBoard(msg)
+    messageEmbeds.leaderBoardEmbed(msg,data)
 
   }
   else if (msg.content.toLowerCase() === "add me" )
@@ -138,8 +116,14 @@ bot.on("message", async (msg) => {
     console.log(random.int((min=1),(max=10)));
     lbMessageHandler.updateUserScore(msg.guild.id,msg.author.id,5)
   }
-  else if(msg.content.toLowerCase() === "help" ){
+  else if(msg.content.toLowerCase() === `${prefix}help`){
+    lbMessageHandler.isDbCreated(msg.guild.id)
     messageEmbeds.helpMessage(msg)
+  }
+  else if(msg.content.toLowerCase() === `${prefix}config`){
+    let filter = (m) => m.author.id === msg.author.id;
+    configMessageHandler.changePrefix(msg.guild.id,msg,filter)
   }
 
 })
+

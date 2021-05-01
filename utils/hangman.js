@@ -91,7 +91,7 @@ exports.hangmanLogic = async (msg,movieName,movieImg,id) => {
     clearInterval(interval);
 
     if (win === false) {
-      lbMessageHandler.updateUserScore(msg.guild.id,msg.author.id,tries,'lost')
+      lbMessageHandler.updateUserScore(msg.guild.id,msg.author.id,tries,'lostn ')
       msg.channel.send(
         `⚰️better luck next time 🫂 \n The right answer is ${movieName.toUpperCase()} \n ${movieImg}`
       );

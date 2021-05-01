@@ -1,9 +1,10 @@
 const hangMan = require('../utils/hangman')
 const axios = require("axios");
 const random = require("random");
+const localMovieData = require('./../public/data/movieName.json')
+const messageEmbeds = require('../model/messageEmbeds')
 
-
-exports.hangmanMessageHandler = async (msg,filter) => {
+exports.hangmanMessageHandler = async (msg,filter,prefix) => {
     
     const rand = (from,to) => {
         return random.int(
@@ -12,12 +13,12 @@ exports.hangmanMessageHandler = async (msg,filter) => {
           )
     }
     // console.log("rand",filter,msg);
-    msg.channel.send("https://tenor.com/view/hang-noose-hanging-daylight-gif-15303115")
-
-    msg.channel.send(
-      " \n Welcome to hangman 🎬 \n Choose game mode: \n ▫️ Random movies - 1(Single player) \n ▫️ Choose movies -2(Two player)"
-    );
-    gameMode = await msg.channel.awaitMessages(filter, {
+    messageEmbeds.welcomeEmbed(msg,prefix)
+    
+    // msg.channel.send(
+    //   " \n Welcome to hangman 🎬 \n Choose game mode: \n ▫️ Random movies - 1(Single player) \n ▫️ Choose movies -2(Two player)"
+    // );
+    gameMode = await msg.channel.awaitMessages(filter,{
       time:20000,
       maxMatches: 1,
       errors: ["time"],
@@ -28,15 +29,26 @@ exports.hangmanMessageHandler = async (msg,filter) => {
     console.log(mode.content);
     if (mode.content === "1") {
       const randomMovieE = await axios.get(
-        `https://api.themoviedb.org/3/movie/popular?api_key=${process.env.TMDB_API_KEY}&language=en-US&page=${rand(1,20)}`
+        `https://api.themoviedb.org/3/movie/popular?api_key=${process.env.TMDB_API_KEY}&language=en-US&page=${rand(1,20)}&include_adult=false`
       );
       const randomMovieT = await axios.get(
         `https://api.themoviedb.org/3/discover/movie?api_key=${process.env.TMDB_API_KEY}&with_original_language=ta&language=ta&page=${rand(1,10)}&sort_by=original_title.asc&year=2019`
       );
-      randomNew = rand(1,9)
-      let movieE = randomMovieE.data.results[randomNew].title
-      let movieEImg = `https://image.tmdb.org/t/p/w500${randomMovieE.data.results[randomNew].poster_path}`
-      // let movieT = randomMovieT.data.results[randomNew].title;
+        if(process.env.MOVIE === 'API'){
+          console.log('API MOVIE');
+            randomNew = rand(1,9)
+            movieE = randomMovieE.data.results[randomNew].title
+            movieEImg = `https://image.tmdb.org/t/p/w500${randomMovieE.data.results[randomNew].poster_path}`
+            movieT = randomMovieT.data.results[randomNew].title;
+        }else{
+          console.log('LOCAL MOVIE');
+          randomNew = rand(1,localMovieData.movies.length)
+          movieE = localMovieData.movies[rand(0,randomNew)].title 
+          
+          movieEImg = localMovieData.movies[rand(0,randomNew)].posterUrl 
+        }
+      
+      
       hangMan.hangmanLogic(msg,movieE,movieEImg, playerId);
     } else if (mode.content === "2") {
 

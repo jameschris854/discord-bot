@@ -9,6 +9,14 @@ bot.login(TOKEN);
 //bot ready and logged in
 bot.on("ready", () => {
   console.info(`Logged in as ${bot.user.tag}!`);
+  bot.user.setStatus('available')
+    bot.user.setPresence({
+        game: {
+            name: `hangman |${'-'}help`,
+            type: "PLAYING",
+            url: "https://www.twitch.tv/monstercat"
+        }
+  })
 });
 
 ///////////////////////CONNECTING TO DTABASE/////////////////////////////////

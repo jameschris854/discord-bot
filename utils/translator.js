@@ -38,6 +38,7 @@ request.end(jsonPayload);
             console.log('Translated text:');
             console.log(chunk);
         }).then((chunk) => {
-            return chunk;
+            return chunk
         })
-    });}
+    })
+}

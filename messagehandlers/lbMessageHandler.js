@@ -1,5 +1,6 @@
 const mongoose = require('mongoose');
 const { findOneAndUpdate } = require('../model/leaderBoardSchema');
+const bot = require('../server')
 
 const lbSchema = require('../model/leaderBoardSchema')
 
@@ -22,11 +23,43 @@ exports.createTestGuild = async (data) => {
 
 
 
-exports.showLeaderBoard = async (guildId) => {
+exports.showLeaderBoard = async (msg) => {
+    let guildId = msg.guild.id
     let data = await lbSchema.findOne({_guildId:guildId})
+    let author = msg.author.id
+    let position = 0;
     console.log('show leaderboard');
+    o = data.guildMembers
+    sortedMembers = Object.entries(o).sort((a,b) => {
+        if(b[1] > a[1]) return 1;
+        else if(b[1] < a[1]) return -1;
+        else{
+          if(a[0]>b[0]) return 1;
+        else if(a[0] < b[0]) return -1;
+        else return 0
+        }
+      })
+    members = sortedMembers
 
-    return [Object.entries(data.guildMembers),data]
+    let userNames = ''
+    let score = ''
+    scores = []  
+    for(let i =0 ;i<members.length;i++){
+         if(members[i][0] === author ){
+             position = i+1
+             scoreAuth = members[i][1]
+         }
+        console.log(members[i][0]);
+        currentUser = await bot.fetchUser(members[i][0])
+        currentUserName = currentUser.username
+        members[i][0] = currentUserName
+        if(i<10){
+            userNames += `\`${i + 1}\`   ${members[i][0]}\n`;
+        score += `\`${members[i][1]}\`\n`;
+    }
+      }
+      console.log(position);
+      return [userNames,score,scoreAuth,position]
 }
 
 
@@ -64,7 +97,8 @@ exports.updateUserScore= async (guildId,userId,gamePoint,state) => {
         console.log('creating user');
 
     }
-    if(state === 'win'){
+    if(state === 'win')
+    {
         console.log(userId);
         score = data.guildMembers [userId] 
         score = score+gamePoint

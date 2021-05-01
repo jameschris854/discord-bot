@@ -9,10 +9,14 @@ const leaderBoardSchema = new mongoose.Schema({
         type: Date,
         default: Date.now,
       },
+      guildPrefix:{
+          type:String,
+          default:'-'
+},
       guildMembers:{
           type:Object,
       }
-},
+},      
 { minimize: false },
 {
     toJSON: { virtuals: true },

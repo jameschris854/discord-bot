@@ -1,5 +1,35 @@
+exports.welcomeEmbed = (msg,prefix) => {
+  return msg.channel.send({embed:{
+    author:{name:msg.guild.name,
+      icon_url: msg.guild.iconURL},
+    description: `_Score is calculated based on tries left at the end of game \n ${prefix}help to see commands and more_`,
+    // color:"3447003",
+    image:  {
+      url: "attachment://hangmanIntro.jpg"
+  },  
+    title:'Hangman',
+    color:'332391',
+    fields:[
+      {name:"Choose game mode:\n \nSINGLE PLAYER",value:`:white_small_square: Random movies - 1(Single player)`,inline:false},
+          {name:"\nTWO PLAYER",value:`:white_small_square: Choose movies -2(Two player)`,inline:false},
+        ],
+        
+    timestamp: new Date(),
+  footer: {
+    icon_url: msg.author.avatarURL,
+    text: "© hangman"
+  },
+  }
+  ,files: ["./public/img/hangmanIntro.jpg"] })
 
-exports.leaderBoardEmbed = (userNames,score,msg) => {
+
+}
+exports.leaderBoardEmbed = (msg,data) => {
+    let userNames= data[0]
+    let score = data[1]
+    let scoreAuth = data[2]
+    let position = data[3]
+  if(position < 11){
     return msg.channel.send({embed:{
         author:{name:msg.guild.name,
           icon_url: msg.guild.iconURL},
@@ -19,6 +49,29 @@ exports.leaderBoardEmbed = (userNames,score,msg) => {
       }
       }
     })
+  }else{
+    return msg.channel.send({embed:{
+      author:{name:msg.guild.name,
+        icon_url: msg.guild.iconURL},
+      url: "https://tenor.com/view/hang-noose-hanging-daylight-gif-15303115",
+      description: "Score is calculated based on tries left at the end of game",
+      // color:"3447003",
+      title:'Hangman Leaderboard',
+      color:'332391',
+      fields:[
+        {name:"Name",value:userNames,inline:true},
+        {name:"Score",value:score,inline:true},
+        {name:"You",value:`\`{position}\`${msg.author.username}`,inline:true},
+        {name:'score',value:`${scoreAuth}`}
+      ],
+      timestamp: new Date(),
+    footer: {
+      icon_url: msg.author.avatarURL,
+      text: "© hangman"
+    }
+    }
+  })
+  }
 }
 exports.helpMessage = (msg) => {
     return msg.channel.send({embed:{
