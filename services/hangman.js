@@ -1,6 +1,6 @@
 const lbMessageHandler = require('../messagehandlers/lbMessageHandler')
 const messageEmbeds = require('../utils/messageEmbeds')
-
+const timer = require('../utils/timer')
 exports.hangmanLogic = async (msg,movieName,movieImg,id) => {
     let filter = (m) => m.author.id === id;
     let moviePre = await movieName.toUpperCase();
@@ -9,7 +9,7 @@ exports.hangmanLogic = async (msg,movieName,movieImg,id) => {
     let guessed = [];
     let tries = 10;
     let win = false;
-    let time = 20;
+    let time = '1min';
 
     movie.map((i) => {
       if (i != " ") {
@@ -24,30 +24,33 @@ exports.hangmanLogic = async (msg,movieName,movieImg,id) => {
       console.log(tries, ans.includes("🟦"));
       finalAns = "";
       console.log(ans.toString());
-      message = await msg.channel.send(
+       await msg.channel.send(
         `MOVIE NAME  :  ${ans
           .toString()
           .replace(/,/g, " ")} | Tries left:${tries} ⏳ | Timer ${time}`
       );
-      interval = setInterval(() => {
-        timeLeft -= 1;
-        message.edit(
-          `MOVIE NAME  :  ${ans
-            .toString()
-            .replace(/,/g, " ")} | Tries left:${tries} ⏳ | Timer ${timeLeft}`
-        );
-      }, 1000);
+      // interval = new timer(message,ans,tries)
+      // interval.start()
+      // interval = setInterval(() => {
+      //   timeLeft -= 1;
+      //   message.edit(
+      //     `MOVIE NAME  :  ${ans
+      //       .toString()
+      //       .replace(/,/g, " ")} | Tries left:${tries} ⏳ | Timer ${timeLeft}`
+      //   );
+      // }, 1000);
       msg.channel.send("Enter a guess ⁉️ -");
       try {
         guessOn = await msg.channel.awaitMessages(filter, {
           maxMatches: 1,
-          time: 20000,
+          time: 5000,
           errors: ["time", "maxMatches"],
         });
         guess = guessOn.first();
         guess = guess.content.toUpperCase();
         console.log(guess);
-        clearInterval(interval);
+        // interval.pause()
+        // clearInterval(interval);
         console.log("while loop");
         console.log(guess);
         if (!guessed.includes(guess)) {
@@ -67,7 +70,8 @@ exports.hangmanLogic = async (msg,movieName,movieImg,id) => {
           console.log(ans);
         } else {
           msg.channel.send("🚫You have already guessed this🚫");
-          clearInterval(interval);
+          // interval.pause()
+          // clearInterval(interval);
           console.log("already guessed");
           console.log(tries);
         }
@@ -80,15 +84,28 @@ exports.hangmanLogic = async (msg,movieName,movieImg,id) => {
         if (movieName.toUpperCase() === ans.toString().replace(/,/g, "")) {
           win = true;
           lbMessageHandler.updateUserScore(msg.guild.id,msg.author.id,tries,'win')
+          if(movieImg === 'none'){
+            movieImg = './public/img/defaultWin.png'
+            messageEmbeds.urlFileEmbed(msg,`${movieName.toUpperCase()} is Right!👑`,`🏅Winner winner wilbur dinner🏅\n ⏯️To start a new game use the command hangman`,`${movieImg}`)
+            return null
+          }
           messageEmbeds.textFileEmbed(msg,`${movieName.toUpperCase()} is Right!👑`,`🏅Winner winner wilbur dinner🏅\n ⏯️To start a new game use the command hangman`,`${movieImg}`)
         }
       } catch (err) {
         console.log(err);
-        messageEmbeds.textFileEmbed(msg,`🚫Time exceeded🚫`,`the answer is : ${movieName.toUpperCase()}`,`${movieImg}`)
-        return clearInterval(interval);
+        console.log(movieImg);
+        if(movieImg === 'none'){
+          movieImg = './public/img/defaultLost.png'
+          messageEmbeds.urlFileEmbed(msg,`\`\`\`🚫Time exceeded🚫`,`the answer is : ${movieName.toUpperCase()}\`\`\``,`${movieImg}`)
+          return null
+        }
+        messageEmbeds.textFileEmbed(msg,`\`\`\`🚫Time exceeded🚫`,`the answer is : ${movieName.toUpperCase()}`,`${movieImg}`)
+        return null
+        // interval.pause()
+        // return clearInterval(interval);
       }
     }
-    clearInterval(interval);
+    // clearInterval(interval);
 
     if (win === false) {
       lbMessageHandler.updateUserScore(msg.guild.id,msg.author.id,tries,'lost')

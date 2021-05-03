@@ -14,16 +14,12 @@ exports.isDbCreated = async(guildId) => {
         console.log('lbCreated');
     }
 }
-
 exports.createTestGuild = async (data) => {
     let doc = await lbSchema.create(data)
     console.log(doc);
 }
-
-
-
-
-exports.showLeaderBoard = async (msg) => {
+exports.showLeaderBoard = async (msg) => 
+{
     let guildId = msg.guild.id
     let data = await lbSchema.findOne({_guildId:guildId})
     let author = msg.author.id
@@ -68,12 +64,31 @@ exports.showLeaderBoard = async (msg) => {
 
 
 
-exports.singleUserScore = async (guildId,user) => {
-    let data = await lbSchema.findOne({_guildId:guildId})
+exports.singleUserScore = async (msg,user) => {
+    let data = await lbSchema.findOne({_guildId:msg.guild.id})
+    console.log('show leaderboard');
+    o = data.guildMembers
+    sortedMembers = Object.entries(o).sort((a,b) => {
+        if(b[1] > a[1]) return 1;
+        else if(b[1] < a[1]) return -1;
+        else{
+          if(a[0]>b[0]) return 1;
+        else if(a[0] < b[0]) return -1;
+        else return 0
+        }
+      })
+    members = sortedMembers
+    console.log(members,user);
+    for(let i =0 ;i<members.length;i++){
+        if(members[i][0] === user ){
+            position = i+1
+        }
+    }
+    console.log(position);
     // data = data.guildMembers.user
     console.log(data);
 
-    return data = data.guildMembers [user]
+    return data = [data.guildMembers [user],position]
 }
 
 
@@ -86,20 +101,18 @@ exports.updateUserScore= async (guildId,userId,gamePoint,state) => {
     console.log(data.guildMembers )
     console.log(userId in data.guildMembers);
     //////////////////check if user exist/////////////////////
-    if(userId in data.guildMembers == false){
+    if(userId in data.guildMembers == false)
+    {
         console.log(userId)
         let newUserData = {}
         let key = userId
-        
         newUserData[key] = 0
-
         console.log(newUserData);
         Object.assign(data.guildMembers,newUserData)
         console.log('merge'+data.guildMembers);
         let updated = await lbSchema.findOneAndUpdate({_guildId:guildId},{guildMembers:data.guildMembers},{returnOriginal:false})
-        console.log(updated);
+        console.log(updated)
         console.log('creating user');
-
     }
     if(state === 'win')
     {
@@ -110,6 +123,7 @@ exports.updateUserScore= async (guildId,userId,gamePoint,state) => {
         data.guildMembers [userId] = score
         console.log('updating');
         let updated = await lbSchema.findOneAndUpdate({_guildId:guildId},{guildMembers:data.guildMembers},{returnOriginal:false})
-        console.log(updated);
+        
+        console.log(updated)
     }
 }

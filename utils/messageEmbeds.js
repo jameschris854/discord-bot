@@ -97,7 +97,7 @@ exports.helpMessage = (msg) => {
       }
     })
 }
-exports.singleUserData = (msg,score) => {
+exports.singleUserData = (msg,score,position) => {
   return msg.channel.send({embed:{
     author:{name:msg.guild.name,
       icon_url: msg.guild.iconURL},
@@ -108,7 +108,7 @@ exports.singleUserData = (msg,score) => {
     color:'332391',
     fields:[
       {name:"Your Score",value:score,inline:true},
-      {name:"LeaderBoard poistion",value:'0',inline:true}
+      {name:"LeaderBoard position",value:`${position}`,inline:true}
     ],
     timestamp: new Date(),
   footer: {
@@ -143,6 +143,10 @@ exports.textFileEmbed = (msg,name,value,fileUrl) => {
 }
 
 exports.urlFileEmbed = (msg,name,value,locFile) => {
+    // extended = locFile.split('/')
+    // extendedUrl = extended[extendedurl.length-1]
+    // console.log(extended,locFile);
+    extendUrl = 'defaultLost.png'
   return msg.channel.send({embed:{
     image:  {
       url: `attachment://${extendUrl}`

@@ -4,7 +4,8 @@ const bot = require('./server')
 const hangmanMessageHandler = require('./messagehandlers/hangmanMessageHandler')
 const lbMessageHandler = require('./messagehandlers/lbMessageHandler');
 const messageEmbeds = require('./utils/messageEmbeds')
-const configMessageHandler = require('./messagehandlers/cofigMessageHandler')
+const configMessageHandler = require('./messagehandlers/cofigMessageHandler');
+const hangman = require("./services/hangmanClass");
 
 
 
@@ -34,8 +35,9 @@ const wilburQuotes = [
   "Say Cobra Cobra",
 ];
 bot.on("message", async (msg) => {  
+  if(msg.author.bot) return;
+  if(!(msg.guild === null)){
   {
-    if(msg.author.bot) return;
   try{
     prefix  = await configMessageHandler.getGuildPrefix(msg.guild.id)
     console.log(prefix);
@@ -43,6 +45,7 @@ bot.on("message", async (msg) => {
     prefix = '-'
     console.log('error caught');
   }
+}
   
   // let filter = m => m.author.id === msg.author.id
   //vennu***wilbur***
@@ -97,8 +100,8 @@ bot.on("message", async (msg) => {
   else if (msg.content.toLowerCase() === `${prefix}score me` )
   {
     lbMessageHandler.isDbCreated(msg.guild.id)
-    let userScore =await lbMessageHandler.singleUserScore(msg.guild.id,msg.author.id)
-    messageEmbeds.singleUserData(msg,userScore)
+    let userData =await lbMessageHandler.singleUserScore(msg,msg.author.id)
+    messageEmbeds.singleUserData(msg,userData[0],userData[1])
   }
   else if(msg.content.toLowerCase() === `${prefix}leaderboard`)
   {  
@@ -126,8 +129,16 @@ bot.on("message", async (msg) => {
     let filter = (m) => m.author.id === msg.author.id;
     configMessageHandler.changePrefix(msg.guild.id,msg,filter)
   }
+  else if(msg.content.toLowerCase() === `${prefix}class`){
+    let filter = (m) => m.author.id === msg.author.id;
+    player1 =new hangman('msg','the shinning','url','adasdadasd')
+    player1.ans()
+    player1.askGuess()
+
+  }
   process.on("uncaughtException", (evt) => { 
     if(evt.code === 'ERR_UNHANDLED_REJECTION'){
+      console.log(evt);
       msg.channel.send('connection timed out ,please try again ⌛')
     }else{
       process.on('unhandledRejection', (err) => {

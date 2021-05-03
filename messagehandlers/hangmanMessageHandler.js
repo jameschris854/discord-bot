@@ -56,11 +56,11 @@ exports.hangmanMessageHandler = async (msg,filter,prefix) => {
       
       hangMan.hangmanLogic(msg,movieE,movieEImg, playerId);
     } else if (mode.content === "2") {
-
+      try{
       await msg.author.send("player-1 : Enter the movie name");
       getMovie = await msg.author.dmChannel.awaitMessages(filter, {
         maxMatches: 1,
-        time:20000,
+        time:60000,
         errors: ["time"],
       });
 
@@ -68,22 +68,27 @@ exports.hangmanMessageHandler = async (msg,filter,prefix) => {
 
       await msg.channel.send('player-2: type "start" to play');
 
-      player2 = await msg.channel.awaitMessages(() => true, {
+      player2 = await msg.channel.awaitMessages(filter, {
         maxMatches: 1,
         time:20000,
         errors: ["time"],
       });
-
+    
       let player2f =await player2.first();
 
       console.log(player2f.content);
 
       let playerTwo = player2f.author.id;
 
-      let image = 'https://i.gifer.com/Kfde.gif'
+      // let image = 'https://i.gifer.com/Kfde.gif'
+      let image = 'none'
 
       hangMan.hangmanLogic(msg,movie.content,image,playerTwo);
+    }catch(err){
+      console.log(err);
+      msg.channel.send('Connection timed out,please try again:no_mouth: ')
     }
+  }
   
 };
 
