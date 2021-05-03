@@ -1,8 +1,9 @@
-const hangMan = require('../utils/hangman')
+const hangMan = require('../services/hangman')
 const axios = require("axios");
 const random = require("random");
 const localMovieData = require('./../public/data/movieName.json')
-const messageEmbeds = require('../model/messageEmbeds')
+const messageEmbeds = require('../utils/messageEmbeds')
+const translate = require('../utils/translator')
 
 exports.hangmanMessageHandler = async (msg,filter,prefix) => {
     
@@ -34,6 +35,10 @@ exports.hangmanMessageHandler = async (msg,filter,prefix) => {
       const randomMovieT = await axios.get(
         `https://api.themoviedb.org/3/discover/movie?api_key=${process.env.TMDB_API_KEY}&with_original_language=ta&language=ta&page=${rand(1,10)}&sort_by=original_title.asc&year=2019`
       );
+        console.log(randomMovieT.data.results[1].title);
+      // let translatedMovie =await translate.translate('ta',randomMovieT.data.results[1].title)
+      // console.log(translatedMovie);
+
         if(process.env.MOVIE === 'API'){
           console.log('API MOVIE');
             randomNew = rand(1,9)
@@ -73,7 +78,7 @@ exports.hangmanMessageHandler = async (msg,filter,prefix) => {
 
       console.log(player2f.content);
 
-      let playerTwo =await player2f.author.id;
+      let playerTwo = player2f.author.id;
 
       let image = 'https://i.gifer.com/Kfde.gif'
 

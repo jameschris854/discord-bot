@@ -1,5 +1,5 @@
 const lbMessageHandler = require('../messagehandlers/lbMessageHandler')
-const messageEmbeds = require('../model/messageEmbeds')
+const messageEmbeds = require('../utils/messageEmbeds')
 
 exports.hangmanLogic = async (msg,movieName,movieImg,id) => {
     let filter = (m) => m.author.id === id;
@@ -92,7 +92,7 @@ exports.hangmanLogic = async (msg,movieName,movieImg,id) => {
 
     if (win === false) {
       lbMessageHandler.updateUserScore(msg.guild.id,msg.author.id,tries,'lost')
-      messageEmbeds.TextFileEmbed(msg,`⚰️better luck next time 🫂`,`The right answer is ${movieName.toUpperCase()} \n  ⏯️To start a new game use the command hangman`,`${movieImg}`)
+      messageEmbeds.textFileEmbed(msg,`⚰️better luck next time 🫂`,`The right answer is ${movieName.toUpperCase()} \n  ⏯️To start a new game use the command hangman`,`${movieImg}`)
     }
   };
 

@@ -28,6 +28,8 @@ exports.showLeaderBoard = async (msg) => {
     let data = await lbSchema.findOne({_guildId:guildId})
     let author = msg.author.id
     let position = 0;
+    let scoreAuth = 'ignore'
+
     console.log('show leaderboard');
     o = data.guildMembers
     sortedMembers = Object.entries(o).sort((a,b) => {
@@ -59,6 +61,8 @@ exports.showLeaderBoard = async (msg) => {
     }
       }
       console.log(position);
+      if(!scoreAuth){
+          scoreAuth = 'ignore'}
       return [userNames,score,scoreAuth,position]
 }
 

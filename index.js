@@ -3,7 +3,7 @@ const Scraper = require("images-scraper");
 const bot = require('./server')
 const hangmanMessageHandler = require('./messagehandlers/hangmanMessageHandler')
 const lbMessageHandler = require('./messagehandlers/lbMessageHandler');
-const messageEmbeds = require('./model/messageEmbeds')
+const messageEmbeds = require('./utils/messageEmbeds')
 const configMessageHandler = require('./messagehandlers/cofigMessageHandler')
 
 
@@ -33,7 +33,9 @@ const wilburQuotes = [
   "Cobra to the right",
   "Say Cobra Cobra",
 ];
-bot.on("message", async (msg) => {
+bot.on("message", async (msg) => {  
+  {
+    if(msg.author.bot) return;
   try{
     prefix  = await configMessageHandler.getGuildPrefix(msg.guild.id)
     console.log(prefix);
@@ -81,17 +83,17 @@ bot.on("message", async (msg) => {
     let filter = (m) => m.author.id === msg.author.id;
     hangmanMessageHandler.hangmanMessageHandler(msg,filter,prefix);
   }
-  else if (msg.content === "dbcheck" ){
-    console.log('checking db');
-    let data = {
-      _guildId:`${msg.guild.id}`,
-    guildMembers:{
-      'james':'200'
-      ,'loki':'500'
-    }
-    }
-    lbMessageHandler.createTestGuild(data)
-  }
+  // else if (msg.content === "dbcheck" ){
+  //   console.log('checking db');
+  //   let data = {
+  //     _guildId:`${msg.guild.id}`,
+  //   guildMembers:{
+  //     'james':'200'
+  //     ,'loki':'500'
+  //   }
+  //   }
+  //   lbMessageHandler.createTestGuild(data)
+  // }
   else if (msg.content.toLowerCase() === `${prefix}score me` )
   {
     lbMessageHandler.isDbCreated(msg.guild.id)
@@ -107,15 +109,15 @@ bot.on("message", async (msg) => {
     messageEmbeds.leaderBoardEmbed(msg,data)
 
   }
-  else if (msg.content.toLowerCase() === "add me" )
-  {
-    lbMessageHandler.updateUserScore(msg.guild.id,msg.author.id,20)
-  }
-  else if(msg.content.toLowerCase() === "win" )
-  {
-    console.log(random.int((min=1),(max=10)));
-    lbMessageHandler.updateUserScore(msg.guild.id,msg.author.id,5)
-  }
+  // else if (msg.content.toLowerCase() === "add me" )
+  // {
+  //   lbMessageHandler.updateUserScore(msg.guild.id,msg.author.id,20)
+  // }
+  // else if(msg.content.toLowerCase() === "win" )
+  // {
+  //   console.log(random.int((min=1),(max=10)));
+  //   lbMessageHandler.updateUserScore(msg.guild.id,msg.author.id,5)
+  // }
   else if(msg.content.toLowerCase() === `${prefix}help`){
     lbMessageHandler.isDbCreated(msg.guild.id)
     messageEmbeds.helpMessage(msg)
@@ -124,6 +126,20 @@ bot.on("message", async (msg) => {
     let filter = (m) => m.author.id === msg.author.id;
     configMessageHandler.changePrefix(msg.guild.id,msg,filter)
   }
-
+  process.on("uncaughtException", (evt) => { 
+    if(evt.code === 'ERR_UNHANDLED_REJECTION'){
+      msg.channel.send('connection timed out ,please try again ⌛')
+    }else{
+      process.on('unhandledRejection', (err) => {
+        console.log('UNHANDLED REJECTION! SHUTTING DOWN');
+        console.log(err.name, err.message,err);
+        // server.close(() => {
+        //   process.exit(1);
+        // });
+        console.log('caught');
+      });
+    }
+  })
+}
 })
 

@@ -29,7 +29,8 @@ exports.leaderBoardEmbed = (msg,data) => {
     let score = data[1]
     let scoreAuth = data[2]
     let position = data[3]
-  if(position < 11){
+    console.log('position'+position,scoreAuth);
+  if(position < 11 || scoreAuth === 'ignore'){
     return msg.channel.send({embed:{
         author:{name:msg.guild.name,
           icon_url: msg.guild.iconURL},
@@ -77,7 +78,7 @@ exports.helpMessage = (msg) => {
     return msg.channel.send({embed:{
         author:{name:msg.guild.name,
           icon_url: msg.guild.iconURL},
-        url: "https://discordapp.com",
+        url: "https://discord.com/api/oauth2/authorize?client_id=835177425599201321&permissions=8&scope=bot",
         description: "Score is calculated based on 'tries left' at the end of game\n",
         title:'_Command List_',
         color:'332391',
