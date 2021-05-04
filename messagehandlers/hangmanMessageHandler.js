@@ -6,7 +6,7 @@ const messageEmbeds = require('../utils/messageEmbeds')
 const translate = require('../utils/translator')
 
 exports.hangmanMessageHandler = async (msg,filter,prefix) => {
-    
+    source = 'API'
     const rand = (from,to) => {
         return random.int(
             (min = from),
@@ -19,17 +19,21 @@ exports.hangmanMessageHandler = async (msg,filter,prefix) => {
     // msg.channel.send(
     //   " \n Welcome to hangman 🎬 \n Choose game mode: \n ▫️ Random movies - 1(Single player) \n ▫️ Choose movies -2(Two player)"
     // );
-    gameMode = await msg.channel.awaitMessages(filter,{
+
+    try{gameMode = await msg.channel.awaitMessages(filter,{
       time:20000,
       maxMatches: 1,
       errors: ["time"],
-    });
+    });}catch(err){
+      console.log(err)
+     msg.channel.send('Connection timed out,please try again:no_mouth: ')
+    }
 
     const mode = gameMode.first();
     playerId = mode.author.id;
     console.log(mode.content);
     if (mode.content === "1") {
-      const randomMovieE = await axios.get(
+      try{const randomMovieE = await axios.get(
         `https://api.themoviedb.org/3/movie/popular?api_key=${process.env.TMDB_API_KEY}&language=en-US&page=${rand(1,20)}&include_adult=false`
       );
       const randomMovieT = await axios.get(
@@ -38,8 +42,12 @@ exports.hangmanMessageHandler = async (msg,filter,prefix) => {
         console.log(randomMovieT.data.results[1].title);
       // let translatedMovie =await translate.translate('ta',randomMovieT.data.results[1].title)
       // console.log(translatedMovie);
+      }catch(err){
+        console.log(err)
+      source ='LOCAL'
+      }
 
-        if(process.env.MOVIE === 'API'){
+        if(process.env.MOVIE === 'API' && source === 'API'){
           console.log('API MOVIE');
             randomNew = rand(1,9)
             movieE = randomMovieE.data.results[randomNew].title
@@ -50,7 +58,7 @@ exports.hangmanMessageHandler = async (msg,filter,prefix) => {
           randomNew = rand(1,localMovieData.movies.length)
           movieE = localMovieData.movies[rand(0,randomNew)].title 
           
-          movieEImg = localMovieData.movies[rand(0,randomNew)].posterUrl 
+          movieEImg = 'none'
         }
       
       
@@ -70,7 +78,7 @@ exports.hangmanMessageHandler = async (msg,filter,prefix) => {
 
       player2 = await msg.channel.awaitMessages(filter, {
         maxMatches: 1,
-        time:20000,
+        time:30000,
         errors: ["time"],
       });
     
@@ -91,5 +99,3 @@ exports.hangmanMessageHandler = async (msg,filter,prefix) => {
   }
   
 };
-
-

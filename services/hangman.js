@@ -108,8 +108,12 @@ exports.hangmanLogic = async (msg,movieName,movieImg,id) => {
     // clearInterval(interval);
 
     if (win === false) {
+      if(movieImg === 'none'){
+          movieImg = './public/img/defaultLost.png'
+          messageEmbeds.urlFileEmbed(msg,`⚰️better luck next time 🫂`,`The right answer is ${movieName.toUpperCase()} \n  ⏯️To start a new game use the command hangman`,`${movieImg}`)
+          return null
+        }
       lbMessageHandler.updateUserScore(msg.guild.id,msg.author.id,tries,'lost')
       messageEmbeds.textFileEmbed(msg,`⚰️better luck next time 🫂`,`The right answer is ${movieName.toUpperCase()} \n  ⏯️To start a new game use the command hangman`,`${movieImg}`)
     }
   };
-

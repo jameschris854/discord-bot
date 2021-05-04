@@ -73,21 +73,26 @@ exports.leaderBoardEmbed = (msg,data) => {
     }
   })
   }
-}
-exports.helpMessage = (msg) => {
-    return msg.channel.send({embed:{
+};
+exports.helpMessage = (msg,prefix) => {
+  console.log('embed'+prefix)
+    return msg.channel.send({
+      embed:{
         author:{name:msg.guild.name,
           icon_url: msg.guild.iconURL},
         url: "https://discord.com/api/oauth2/authorize?client_id=835177425599201321&permissions=8&scope=bot",
-        description: "Score is calculated based on 'tries left' at the end of game\n",
-        title:'_Command List_',
+        description: "Score is calculated based on 'tries left' at the end of game\n invite bot here [invite](https://discord.com/api/oauth2/authorize?client_id=835177425599201321&permissions=8&scope=bot)",
+        title:'  \n \n Command List ',
         color:'332391',
         fields:[
-          {name:"hangman",value:'play either single player or 2player in hangman',inline:false},
           {name:"Game description",value:'hangman is a game where you will have 7 tries to guess a movie name \n there is a 20sec gap between each try',inline:false},
-          {name:"vennu",value:'type vennu ,rest is history',inline:false},
-          {name:'wilbur',value:'type wilbur to experience the cobra'},
-          {name:'score me',value:'get your individual score from the leaderboard'}
+          {name:`${prefix}hangman`,value:'play either single player or 2player in hangman',inline:false},
+          {name:`${prefix}score me`,value:'get your individual score from the leaderboard'},
+          {name:`${prefix}lederboard`,value:'check the leaderboard for your server'},
+          {name:`${prefix}config`,value:'change prefix for your server ,default[-]'},
+          {name:`${prefix}help`,value:'get the list of commands'},
+          {name:"vennu",value:'im the true liar',inline:true},
+          {name:'wilbur',value:'experience the cobra cobra',inline:true},
         ],
         timestamp: new Date(),
       footer: {
@@ -95,8 +100,8 @@ exports.helpMessage = (msg) => {
         text: "© hangman"
       }
       }
-    })
-}
+    });
+};
 exports.singleUserData = (msg,score,position) => {
   return msg.channel.send({embed:{
     author:{name:msg.guild.name,
@@ -143,13 +148,12 @@ exports.textFileEmbed = (msg,name,value,fileUrl) => {
 }
 
 exports.urlFileEmbed = (msg,name,value,locFile) => {
-    // extended = locFile.split('/')
-    // extendedUrl = extended[extendedurl.length-1]
-    // console.log(extended,locFile);
-    extendUrl = 'defaultLost.png'
+    extended = locFile.split('/')
+    extendedUrl = extended[extended.length-1]
+    console.log(extendedUrl,locFile);
   return msg.channel.send({embed:{
     image:  {
-      url: `attachment://${extendUrl}`
+      url: `attachment://${extendedUrl}`
   }, 
     fields:[
       {name:name,value:value,inline:false},
