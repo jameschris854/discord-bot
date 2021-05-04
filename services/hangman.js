@@ -7,7 +7,7 @@ exports.hangmanLogic = async (msg,movieName,movieImg,id) => {
     let movie = moviePre.split("");
     let ans = [];
     let guessed = [];
-    let tries = 10;
+    let tries = 7;
     let win = false;
     let time = '1min';
 
@@ -20,7 +20,7 @@ exports.hangmanLogic = async (msg,movieName,movieImg,id) => {
     });
     console.log(ans);
     while (ans.includes("🟦") && tries > 0) {
-      let timeLeft = 20;
+      // let timeLeft = 20;
       console.log(tries, ans.includes("🟦"));
       finalAns = "";
       console.log(ans.toString());
@@ -117,3 +117,4 @@ exports.hangmanLogic = async (msg,movieName,movieImg,id) => {
       messageEmbeds.textFileEmbed(msg,`⚰️better luck next time 🫂`,`The right answer is ${movieName.toUpperCase()} \n  ⏯️To start a new game use the command hangman`,`${movieImg}`)
     }
   };
+

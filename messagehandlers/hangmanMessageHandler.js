@@ -33,10 +33,10 @@ exports.hangmanMessageHandler = async (msg,filter,prefix) => {
     playerId = mode.author.id;
     console.log(mode.content);
     if (mode.content === "1") {
-      try{const randomMovieE = await axios.get(
+      try{randomMovieE = await axios.get(
         `https://api.themoviedb.org/3/movie/popular?api_key=${process.env.TMDB_API_KEY}&language=en-US&page=${rand(1,20)}&include_adult=false`
       );
-      const randomMovieT = await axios.get(
+      randomMovieT = await axios.get(
         `https://api.themoviedb.org/3/discover/movie?api_key=${process.env.TMDB_API_KEY}&with_original_language=ta&language=ta&page=${rand(1,10)}&sort_by=original_title.asc&year=2019`
       );
         console.log(randomMovieT.data.results[1].title);
@@ -75,8 +75,8 @@ exports.hangmanMessageHandler = async (msg,filter,prefix) => {
       const movie = getMovie.first();
 
       await msg.channel.send('player-2: type "start" to play');
-
-      player2 = await msg.channel.awaitMessages(filter, {
+      let filter2p = (m) => !(m.author.bot)
+      player2 = await msg.channel.awaitMessages(filter2p, {
         maxMatches: 1,
         time:30000,
         errors: ["time"],
@@ -99,3 +99,4 @@ exports.hangmanMessageHandler = async (msg,filter,prefix) => {
   }
   
 };
+

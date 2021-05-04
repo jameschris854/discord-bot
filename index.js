@@ -6,7 +6,9 @@ const lbMessageHandler = require('./messagehandlers/lbMessageHandler');
 const messageEmbeds = require('./utils/messageEmbeds')
 const configMessageHandler = require('./messagehandlers/cofigMessageHandler');
 const hangman = require("./services/hangmanClass");
-
+const express = require('express');
+const app = express();
+const port = 3000;
 
 
 const vennuQuotes = [
@@ -123,7 +125,7 @@ bot.on("message", async (msg) => {
   // }
   else if(msg.content.toLowerCase() === `${prefix}help`){
     lbMessageHandler.isDbCreated(msg.guild.id)
-    messageEmbeds.helpMessage(msg)
+    messageEmbeds.helpMessage(msg,prefix)
   }
   else if(msg.content.toLowerCase() === `${prefix}config`){
     let filter = (m) => m.author.id === msg.author.id;
@@ -154,3 +156,8 @@ bot.on("message", async (msg) => {
 }
 })
 
+
+
+app.get('/', (req, res) => res.send('Hello World!'));
+
+app.listen(port, () => console.log(`Discord app listening at http://localhost:${port}`));

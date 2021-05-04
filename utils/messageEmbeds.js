@@ -6,7 +6,7 @@ exports.welcomeEmbed = (msg,prefix) => {
     // color:"3447003",
     image:  {
       url: "attachment://hangmanIntro.jpg"
-  },  
+      },  
     title:'Hangman',
     color:'332391',
     fields:[
@@ -81,7 +81,7 @@ exports.helpMessage = (msg,prefix) => {
         author:{name:msg.guild.name,
           icon_url: msg.guild.iconURL},
         url: "https://discord.com/api/oauth2/authorize?client_id=835177425599201321&permissions=8&scope=bot",
-        description: "Score is calculated based on 'tries left' at the end of game\n invite bot here [invite](https://discord.com/api/oauth2/authorize?client_id=835177425599201321&permissions=8&scope=bot)",
+        description: "Score is calculated based on 'tries left' at the end of game\n invite bot here [invite](https://discord.com/oauth2/authorize?client_id=839057473289322496&permissions=8&scope=bot)",
         title:'  \n \n Command List ',
         color:'332391',
         fields:[
