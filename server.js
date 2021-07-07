@@ -6,11 +6,16 @@ const TOKEN = process.env.TOKEN;
 const mongoose = require('mongoose')
 let prefix = '-'
 ///////////////////LOGGING IN BOT ///////////////////////////////////////
+
 bot.login(TOKEN);
+
 //bot ready and logged in
+console.log(bot.user)
 bot.on("ready", () => {
-  console.info(`Logged in as ${bot.user.tag}!`);
-  bot.user.setStatus('available')
+  console.info(`Bot has started, with 
+  ${bot.users.cache.size} users, in 
+  ${bot.channels.cache.size} channels of 
+  ${bot.guilds.cache.size} guilds.`)
     bot.user.setActivity(`${prefix}help|hangman`,{type: "WATCHING"})
 });
 

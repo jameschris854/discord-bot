@@ -10,8 +10,12 @@ exports.isDbCreated = async(msg) => {
     if(data){
         console.log('lbPresent');
     }else{
+
         await lbSchema.create({_guildId:msg.guild.id,guildName:msg.guild.name,guildMembers:{}})
         console.log('lbCreated');
+
+        const channel = bot.channels.cache.get('862197552350232587');
+        channel.send(`<logs>: New lb created for <${msg.guild.id}>`)
     }
 }
 exports.createTestGuild = async (data) => {

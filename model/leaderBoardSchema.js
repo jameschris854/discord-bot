@@ -18,7 +18,8 @@ const leaderBoardSchema = new mongoose.Schema({
 },
       guildMembers:{
           type:Object,
-      }
+      },
+      activeMemberCount:Number
 },      
 { minimize: false },
 {

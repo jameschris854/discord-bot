@@ -36,8 +36,12 @@ const wilburQuotes = [
   "Cobra to the right",
   "Say Cobra Cobra",
 ];
-bot.on("message", async (msg) => {  
+bot.on("message", async (msg) => { 
+
   if(msg.author.bot) return;
+
+
+
   if(!(msg.guild === null)){
   {
   try{
@@ -45,7 +49,7 @@ bot.on("message", async (msg) => {
     console.log(prefix);
   }catch(err){
     prefix = '-'
-    console.log('error caught prefix');
+    // console.log('error caught prefix');
   }
 }
   
@@ -118,11 +122,12 @@ bot.on("message", async (msg) => {
   // {
   //   lbMessageHandler.updateUserScore(msg.guild.id,msg.author.id,20)
   // }
-  // else if(msg.content.toLowerCase() === "win" )
-  // {
-  //   console.log(random.int((min=1),(max=10)));
-  //   lbMessageHandler.updateUserScore(msg.guild.id,msg.author.id,5)
-  // }
+  else if(msg.content.toLowerCase() === `${prefix}stats` )
+  {
+    console.log(random.int((min=1),(max=10)));
+    msg.channel.send(`server count : ${bot.guilds.cache.size}\nactive users ${bot.users.cache.size}\nchannels ${bot.channels.cache.size}`)
+      
+  }
   else if(msg.content.toLowerCase() === `${prefix}help`){
     lbMessageHandler.isDbCreated(msg)
     messageEmbeds.helpMessage(msg,prefix)
