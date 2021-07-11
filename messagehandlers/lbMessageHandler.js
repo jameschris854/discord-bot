@@ -2,20 +2,20 @@ const mongoose = require('mongoose');
 const { findOneAndUpdate } = require('../model/leaderBoardSchema');
 const bot = require('../server')
 
+
 const lbSchema = require('../model/leaderBoardSchema')
 
 exports.isDbCreated = async(msg) => {
     let data = await lbSchema.findOne({_guildId:msg.guild.id})
-
     if(data){
         console.log('lbPresent');
+        // const channel = bot.channels.cache.get('862197552350232587');
     }else{
 
         await lbSchema.create({_guildId:msg.guild.id,guildName:msg.guild.name,guildMembers:{}})
         console.log('lbCreated');
 
-        const channel = bot.channels.cache.get('862197552350232587');
-        channel.send(`<logs>: New lb created for <${msg.guild.id}>`)
+        bot.testChannel.send(`<logs>: New lb created for <${msg.guild.id}>`)
     }
 }
 exports.createTestGuild = async (data) => {
@@ -46,7 +46,6 @@ exports.showLeaderBoard = async (msg) =>
         }
       })
     members = sortedMembers
-
     let userNames = ''
     let score = ''
     scores = []  
@@ -56,8 +55,16 @@ exports.showLeaderBoard = async (msg) =>
              scoreAuth = members[i][1]
          }
         console.log(members[i][0]);
-        currentUser = await bot.users.fetch(members[i][0])
-        currentUserName = currentUser.username
+        console.log(msg.guild.id)
+
+        // let test = bot.users.fetch('390758809930301440')
+        let test =await msg.guild.members.fetch(members[i][0])
+
+        console.log('test : '+JSON.stringify(test));
+
+        currentUser = await msg.guild.members.fetch(members[i][0]);
+        
+        currentUserName = currentUser.displayName;
         members[i][0] = currentUserName
         if(i<10){
             userNames += `\`${i + 1}\`   ${members[i][0]}\n`;
@@ -136,5 +143,18 @@ exports.updateUserScore= async (guildId,userId,gamePoint,state) => {
         let updated = await lbSchema.findOneAndUpdate({_guildId:guildId},{guildMembers:data.guildMembers},{returnOriginal:false})
         
         console.log(updated)
+    }
+}
+
+
+exports.deleteLeaderboard = async (guild) =>{
+    console.log('deleting db')
+    try{
+    let deletedServer = await lbSchema.findOne({'_guildId':guild.id})
+    if(!deletedServer) return
+    let remServer = await lbSchema.findOneAndDelete({'_guildId':guild.id})
+    console.log(remServer)
+    }catch(err){
+      console.log(err.message)
     }
 }

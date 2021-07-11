@@ -11,12 +11,19 @@ exports.getGuildPrefix = async (guildId) => {
 
 exports.changePrefix =async  (guildId,msg,filter) => {
     try{
+    if (msg.member.hasPermission("ADMINISTRATOR")) {
+       console.log('THIS USER HAS ADMINISTRATOR PERMISSIONS!')
+    }else{
+       msg.channel.send(`you have to be an admin to change prefix:detective: `)
+       return null
+    }
       msg.channel.send(`\`\`                 🤖    CONFIG    🤖  \n Enter new prefix for your server:                    \`\``);
       newPrefix = await msg.channel.awaitMessages(filter,{
         max: 1,
         time:30000,
         errors: ["time"],
       });
+
 
       newPrefix = newPrefix.first()
 
