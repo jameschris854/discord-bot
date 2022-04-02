@@ -5,6 +5,7 @@ const bot = new Discord.Client();
 const TOKEN = process.env.TOKEN;
 const mongoose = require('mongoose')
 const lbMessageHandler = require('./messagehandlers/lbMessageHandler');
+const Genre = require("./services/Genre");
 let prefix = '-'
 ///////////////////LOGGING IN BOT ///////////////////////////////////////
 
@@ -13,6 +14,9 @@ bot.login(TOKEN);
 //bot ready and logged in
 console.log(bot.user)
 bot.on("ready", () => {
+  //get genres list from movie db
+  Genre.getGenres().then(() => console.log(Genre.movieGenreList))
+  
   console.info(`Bot has started, with 
   ${bot.users.cache.size} users, in 
   ${bot.channels.cache.size} channels of 

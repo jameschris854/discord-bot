@@ -163,3 +163,9 @@ exports.urlFileEmbed = (msg,name,value,locFile) => {
     ]  
   },files:[`${locFile}`]})
 }
+
+exports.noGenreErrorMsg = (msg) => {
+return msg.channel.send({embed:{
+  description:'Unable to find this genre :no_mouth: ,check genre list [[here]](https://top.gg/bot/839057473289322496).'
+  }})
+}

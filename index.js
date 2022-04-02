@@ -85,12 +85,16 @@ bot.on("message", async (msg) => {
     };
     url();
   }
-
+  else if(msg.content.includes(' ') && msg.content.split(' ')[0].toLowerCase() === `${prefix}hangman` && msg.content.split(' ').length == 2){
+    lbMessageHandler.isDbCreated(msg)
+    let filter = (m) => m.author.id === msg.author.id;
+    hangmanMessageHandler.hangmanCategoryMessageHandler(msg,filter,prefix);
+  }
   ////////////////////////////////// HANGMAN /////////////////////////
   else if (msg.content.toLowerCase() === `${prefix}hangman`) {
     lbMessageHandler.isDbCreated(msg)
     let filter = (m) => m.author.id === msg.author.id;
-    hangmanMessageHandler.hangmanMessageHandler(msg,filter,prefix);
+    hangmanMessageHandler.hangmanMessageHandler(msg,filter,prefix,null);
   }
   // else if (msg.content === "dbcheck" ){
   //   console.log('checking db');
@@ -164,6 +168,7 @@ bot.on("message", async (msg) => {
 
 
 
-app.get('/', (req, res) => res.send('Hello World!'));
+app.get('/', (req, res) => res.send(
+  '<!-- Global site tag (gtag.js) - Google Analytics --><script async src="https://www.googletagmanager.com/gtag/js?id=G-7L1D36S69D"></script><script>window.dataLayer = window.dataLayer || [];function gtag(){dataLayer.push(arguments);}gtag("js", new Date());gtag("config", "G-7L1D36S69D");</script>Hello World!'));
 
 app.listen(port, () => console.log(`Discord app listening at http://localhost:${port}`));
