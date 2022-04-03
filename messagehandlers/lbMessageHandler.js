@@ -58,11 +58,15 @@ exports.showLeaderBoard = async (msg) =>
         console.log(msg.guild.id)
 
         // let test = bot.users.fetch('390758809930301440')
+        try{
         let test =await msg.guild.members.fetch(members[i][0])
 
         console.log('test : '+JSON.stringify(test));
-
         currentUser = await msg.guild.members.fetch(members[i][0]);
+        }catch(e){
+          currentUser = 'user not found'
+          console.log(e)
+        }
         
         currentUserName = currentUser.displayName;
         members[i][0] = currentUserName
