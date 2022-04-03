@@ -10,8 +10,8 @@ exports.welcomeEmbed = (msg,prefix) => {
     title:'Hangman',
     color:'332391',
     fields:[
-      {name:"Choose game mode:\n \nSINGLE PLAYER",value:`:white_small_square: Random movies - 1(Single player)`,inline:false},
-          {name:"\nTWO PLAYER",value:`:white_small_square: Choose movies -2(Two player)`,inline:false},
+      {name:"Choose game mode:\n \nSINGLE PLAYER",value:`:white_small_square: Random movies - \`\` 1 \`\`  (Single player)`,inline:false},
+          {name:"\nTWO PLAYER",value:`:white_small_square: Choose movies - \`\` 2 \`\`  (Two player)`,inline:false},
         ],
         
     timestamp: new Date(),
@@ -80,8 +80,8 @@ exports.helpMessage = (msg,prefix) => {
       embed:{
         author:{name:msg.guild.name,
           icon_url: msg.guild.iconURL},
-        url: "https://discord.com/api/oauth2/authorize?client_id=835177425599201321&permissions=8&scope=bot",
-        description: "Score is calculated based on 'tries left' at the end of game\n invite bot here [invite](https://discord.com/oauth2/authorize?client_id=839057473289322496&permissions=8&scope=bot)",
+        url: "https://top.gg/bot/839057473289322496",
+        description: "Score is calculated based on 'tries left' at the end of game\n[[invite]](https://discord.com/oauth2/authorize?client_id=839057473289322496&permissions=8&scope=bot) [[vote]](https://top.gg/bot/839057473289322496/vote)",
         title:'  \n \n Command List ',
         color:'332391',
         fields:[
@@ -91,8 +91,11 @@ exports.helpMessage = (msg,prefix) => {
           {name:`${prefix}lederboard`,value:'check the leaderboard for your server'},
           {name:`${prefix}config`,value:'change prefix for your server ,default[-]'},
           {name:`${prefix}help`,value:'get the list of commands'},
-          {name:"vennu",value:'im the true liar',inline:true},
-          {name:'wilbur',value:'experience the cobra cobra',inline:true},
+          {name:`support`,value:'join the support server [support](https://discord.gg/z5hVMJmEQS)'},
+          
+          
+          // {name:"vennu",value:'im the true liar',inline:true},
+          // {name:'wilbur',value:'experience the cobra cobra',inline:true},
         ],
         timestamp: new Date(),
       footer: {
@@ -159,4 +162,10 @@ exports.urlFileEmbed = (msg,name,value,locFile) => {
       {name:name,value:value,inline:false},
     ]  
   },files:[`${locFile}`]})
+}
+
+exports.noGenreErrorMsg = (msg) => {
+return msg.channel.send({embed:{
+  description:'Unable to find this genre :no_mouth: ,check genre list [[here]](https://top.gg/bot/839057473289322496).'
+  }})
 }

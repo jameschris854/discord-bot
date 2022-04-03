@@ -4,6 +4,9 @@ const leaderBoardSchema = new mongoose.Schema({
     _guildId:{
         type:String,
         required:[true,'_guildId is either undefined or not provided']
+    },guildName:{
+      type:String,
+      required:[true,'guild name must be specified']
     },
     createdAt: {
         type: Date,
@@ -15,7 +18,8 @@ const leaderBoardSchema = new mongoose.Schema({
 },
       guildMembers:{
           type:Object,
-      }
+      },
+      activeMemberCount:Number
 },      
 { minimize: false },
 {

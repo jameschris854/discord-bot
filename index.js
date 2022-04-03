@@ -36,8 +36,12 @@ const wilburQuotes = [
   "Cobra to the right",
   "Say Cobra Cobra",
 ];
-bot.on("message", async (msg) => {  
+bot.on("message", async (msg) => { 
+
   if(msg.author.bot) return;
+
+
+
   if(!(msg.guild === null)){
   {
   try{
@@ -45,7 +49,7 @@ bot.on("message", async (msg) => {
     console.log(prefix);
   }catch(err){
     prefix = '-'
-    console.log('error caught');
+    // console.log('error caught prefix');
   }
 }
   
@@ -81,12 +85,16 @@ bot.on("message", async (msg) => {
     };
     url();
   }
-
+  else if(msg.content.includes(' ') && msg.content.split(' ')[0].toLowerCase() === `${prefix}hangman` && msg.content.split(' ').length == 2){
+    lbMessageHandler.isDbCreated(msg)
+    let filter = (m) => m.author.id === msg.author.id;
+    hangmanMessageHandler.hangmanCategoryMessageHandler(msg,filter,prefix);
+  }
   ////////////////////////////////// HANGMAN /////////////////////////
   else if (msg.content.toLowerCase() === `${prefix}hangman`) {
-    lbMessageHandler.isDbCreated(msg.guild.id)
+    lbMessageHandler.isDbCreated(msg)
     let filter = (m) => m.author.id === msg.author.id;
-    hangmanMessageHandler.hangmanMessageHandler(msg,filter,prefix);
+    hangmanMessageHandler.hangmanMessageHandler(msg,filter,prefix,null);
   }
   // else if (msg.content === "dbcheck" ){
   //   console.log('checking db');
@@ -101,14 +109,14 @@ bot.on("message", async (msg) => {
   // }
   else if (msg.content.toLowerCase() === `${prefix}score me` )
   {
-    lbMessageHandler.isDbCreated(msg.guild.id)
+    lbMessageHandler.isDbCreated(msg)
     let userData =await lbMessageHandler.singleUserScore(msg,msg.author.id)
     messageEmbeds.singleUserData(msg,userData[0],userData[1])
   }
   else if(msg.content.toLowerCase() === `${prefix}leaderboard`)
   {  
     console.log('leaderboard');
-    lbMessageHandler.isDbCreated(msg.guild.id)
+    lbMessageHandler.isDbCreated(msg)
     console.log(msg.guild.id);
     let data  = await lbMessageHandler.showLeaderBoard(msg)
     messageEmbeds.leaderBoardEmbed(msg,data)
@@ -118,16 +126,18 @@ bot.on("message", async (msg) => {
   // {
   //   lbMessageHandler.updateUserScore(msg.guild.id,msg.author.id,20)
   // }
-  // else if(msg.content.toLowerCase() === "win" )
-  // {
-  //   console.log(random.int((min=1),(max=10)));
-  //   lbMessageHandler.updateUserScore(msg.guild.id,msg.author.id,5)
-  // }
+  else if(msg.content.toLowerCase() === `${prefix}stats` )
+  {
+    console.log(random.int((min=1),(max=10)));
+    msg.channel.send(`server count : ${bot.guilds.cache.size}\nactive users ${bot.users.cache.size}\nchannels ${bot.channels.cache.size}`)
+      
+  }
   else if(msg.content.toLowerCase() === `${prefix}help`){
-    lbMessageHandler.isDbCreated(msg.guild.id)
+    lbMessageHandler.isDbCreated(msg)
     messageEmbeds.helpMessage(msg,prefix)
   }
   else if(msg.content.toLowerCase() === `${prefix}config`){
+    lbMessageHandler.isDbCreated(msg)
     let filter = (m) => m.author.id === msg.author.id;
     configMessageHandler.changePrefix(msg.guild.id,msg,filter)
   }
@@ -158,6 +168,7 @@ bot.on("message", async (msg) => {
 
 
 
-app.get('/', (req, res) => res.send('Hello World!'));
+app.get('/', (req, res) => res.send(
+  '<!-- Global site tag (gtag.js) - Google Analytics --><script async src="https://www.googletagmanager.com/gtag/js?id=G-7L1D36S69D"></script><script>window.dataLayer = window.dataLayer || [];function gtag(){dataLayer.push(arguments);}gtag("js", new Date());gtag("config", "G-7L1D36S69D");</script>Hello World!'));
 
 app.listen(port, () => console.log(`Discord app listening at http://localhost:${port}`));

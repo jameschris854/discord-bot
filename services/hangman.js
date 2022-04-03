@@ -42,7 +42,7 @@ exports.hangmanLogic = async (msg,movieName,movieImg,id) => {
       msg.channel.send("Enter a guess ⁉️ -");
       try {
         guessOn = await msg.channel.awaitMessages(filter, {
-          maxMatches: 1,
+          max: 1,
           time: 60000,
           errors: ["time", "maxMatches"],
         });
@@ -83,7 +83,7 @@ exports.hangmanLogic = async (msg,movieName,movieImg,id) => {
         );
         if (movieName.toUpperCase() === ans.toString().replace(/,/g, "")) {
           win = true;
-          lbMessageHandler.updateUserScore(msg.guild.id,msg.author.id,tries,'win')
+          lbMessageHandler.updateUserScore(msg.guild.id,id,tries,'win')
           if(movieImg === 'none'){
             movieImg = './public/img/defaultWin.png'
             messageEmbeds.urlFileEmbed(msg,`${movieName.toUpperCase()} is Right!👑`,`🏅Winner winner wilbur dinner🏅\n ⏯️To start a new game use the command hangman`,`${movieImg}`)
@@ -117,4 +117,3 @@ exports.hangmanLogic = async (msg,movieName,movieImg,id) => {
       messageEmbeds.textFileEmbed(msg,`⚰️better luck next time 🫂`,`The right answer is ${movieName.toUpperCase()} \n  ⏯️To start a new game use the command hangman`,`${movieImg}`)
     }
   };
-
