@@ -11,6 +11,17 @@ exports.hangmanLogic = async (msg,movieName,movieImg,id) => {
     let win = false;
     let time = '1min';
 
+    const handleWin = () => {
+      win = true;
+      lbMessageHandler.updateUserScore(msg.guild.id,id,tries,'win')
+      if(movieImg === 'none'){
+        movieImg = './public/img/defaultWin.png'
+        messageEmbeds.urlFileEmbed(msg,`${movieName.toUpperCase()} is Right!👑`,`🏅Winner winner wilbur dinner🏅\n ⏯️To start a new game use the command hangman`,`${movieImg}`)
+        return null
+      }
+      return messageEmbeds.textFileEmbed(msg,`${movieName.toUpperCase()} is Right!👑`,`🏅Winner winner wilbur dinner🏅\n ⏯️To start a new game use the command hangman`,`${movieImg}`)
+    }
+
     movie.map((i) => {
       if (i != " ") {
         ans.push("🟦");
@@ -19,7 +30,7 @@ exports.hangmanLogic = async (msg,movieName,movieImg,id) => {
       }
     });
     console.log(ans);
-    while (ans.includes("🟦") && tries > 0) {
+    while (ans.includes("🟦") && tries > 0 && !win) {
       // let timeLeft = 20;
       console.log(tries, ans.includes("🟦"));
       finalAns = "";
@@ -53,27 +64,31 @@ exports.hangmanLogic = async (msg,movieName,movieImg,id) => {
         // clearInterval(interval);
         console.log("while loop");
         console.log(guess);
-        if (!guessed.includes(guess)) {
-          console.log(guessed.includes(guess));
-          console.log("guess not n guesed");
-          guessed.push(guess);
-          if (movie.includes(guess)) {
-            for (let i = 0; i < movie.length; i++) {
-              if (movie[i] == guess) {
-                ans[i] = guess;
-                console.log("for loop");
+        if(guess === movieName.toUpperCase()){
+          handleWin()
+        }else{
+          if (!guessed.includes(guess)) {
+            console.log(guessed.includes(guess));
+            console.log("guess not n guesed");
+            guessed.push(guess);
+            if (movie.includes(guess)) {
+              for (let i = 0; i < movie.length; i++) {
+                if (movie[i] == guess) {
+                  ans[i] = guess;
+                  console.log("for loop");
+                }
               }
+            } else {
+              tries -= 1;
             }
+            console.log(ans);
           } else {
-            tries -= 1;
+            msg.channel.send("🚫You have already guessed this🚫");
+            // interval.pause()
+            // clearInterval(interval);
+            console.log("already guessed");
+            console.log(tries);
           }
-          console.log(ans);
-        } else {
-          msg.channel.send("🚫You have already guessed this🚫");
-          // interval.pause()
-          // clearInterval(interval);
-          console.log("already guessed");
-          console.log(tries);
         }
         console.log(ans.toString().replace(",", " "));
         console.log(
@@ -82,14 +97,7 @@ exports.hangmanLogic = async (msg,movieName,movieImg,id) => {
           ans.toString().replace(/,/g, "")
         );
         if (movieName.toUpperCase() === ans.toString().replace(/,/g, "")) {
-          win = true;
-          lbMessageHandler.updateUserScore(msg.guild.id,id,tries,'win')
-          if(movieImg === 'none'){
-            movieImg = './public/img/defaultWin.png'
-            messageEmbeds.urlFileEmbed(msg,`${movieName.toUpperCase()} is Right!👑`,`🏅Winner winner wilbur dinner🏅\n ⏯️To start a new game use the command hangman`,`${movieImg}`)
-            return null
-          }
-          messageEmbeds.textFileEmbed(msg,`${movieName.toUpperCase()} is Right!👑`,`🏅Winner winner wilbur dinner🏅\n ⏯️To start a new game use the command hangman`,`${movieImg}`)
+          handleWin()
         }
       } catch (err) {
         console.log(err);
