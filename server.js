@@ -1,7 +1,15 @@
 require("dotenv").config();
 
 const Discord = require("discord.js");
-const bot = new Discord.Client();
+const bot = new Discord.Client({
+  intents:
+    [
+      Discord.Intents.FLAGS.GUILDS,
+      Discord.Intents.FLAGS.GUILD_MESSAGES,
+      Discord.Intents.FLAGS.DIRECT_MESSAGES,
+      Discord.Intents.FLAGS.GUILD_MEMBERS,
+    ]
+});
 const TOKEN = process.env.TOKEN;
 const mongoose = require('mongoose')
 const lbMessageHandler = require('./messagehandlers/lbMessageHandler');
@@ -16,7 +24,7 @@ console.log(bot.user)
 bot.on("ready", () => {
   //get genres list from movie db
   Genre.getGenres().then(() => console.log(Genre.movieGenreList))
-  
+
   console.info(`Bot has started, with 
   ${bot.users.cache.size} users, in 
   ${bot.channels.cache.size} channels of 

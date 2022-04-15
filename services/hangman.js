@@ -52,7 +52,7 @@ exports.hangmanLogic = async (msg,movieName,movieImg,id) => {
       // }, 1000);
       msg.channel.send("Enter a guess ⁉️ -");
       try {
-        guessOn = await msg.channel.awaitMessages(filter, {
+        guessOn = await msg.channel.awaitMessages({filter,
           max: 1,
           time: 60000,
           errors: ["time", "maxMatches"],

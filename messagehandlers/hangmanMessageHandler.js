@@ -24,11 +24,11 @@ exports.hangmanMessageHandler = async (msg,filter,prefix,cat) => {
 
     try{
       console.log('gameMode1'+gameMode) 
-      gameMode = await msg.channel.awaitMessages(filter,{
+      gameMode = await msg.channel.awaitMessages({filter,
       max: 1,
       time:20000,
-      errors: ["time"],
-    })}catch(err){
+      errors: ["time"]}
+    )}catch(err){
       console.log(err.message)
      msg.channel.send('Connection timed out,please try again:no_mouth: ')
      return null
@@ -75,7 +75,7 @@ exports.hangmanMessageHandler = async (msg,filter,prefix,cat) => {
     } else if (mode.content === "2") {
       try{
       await msg.author.send("player-1 : Enter the movie name");
-      getMovie = await msg.author.dmChannel.awaitMessages(filter, {
+      getMovie = await msg.author.dmChannel.awaitMessages({filter,
         max: 1,
         time:60000,
         errors: ["time"],
@@ -85,7 +85,7 @@ exports.hangmanMessageHandler = async (msg,filter,prefix,cat) => {
 
       await msg.channel.send('player-2: type "start" to play');
       let filter2p = (m) => !(m.author.bot)
-      player2 = await msg.channel.awaitMessages(filter2p, {
+      player2 = await msg.channel.awaitMessages({filter:filter2p, 
         max: 1,
         time:30000,
         errors: ["time"],
