@@ -17,9 +17,8 @@ exports.interactionHandler = async interaction => {
       const data = await lbMessageHandler.showLeaderBoard(interaction,interaction.user)
       messageEmbeds.leaderBoardEmbed(interaction,data,interaction.user.id)
     }else if(commandName === SCORE_ME){
-      lbMessageHandler.isDbCreated(interaction)
-      let userData =await lbMessageHandler.singleUserScore(interaction,interaction.user)
-      messageEmbeds.singleUserData(interaction,userData[0],userData[1])
+      let userData = await lbMessageHandler.singleUserScore(interaction,interaction.user.id)
+      messageEmbeds.singleUserData(interaction,userData[0],userData[1],interaction.user)
     }
   
   }

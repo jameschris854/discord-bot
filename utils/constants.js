@@ -24,7 +24,7 @@ const wilburQuotes = [
     "Say Cobra Cobra",
   ];
 
-  const SCORE_ME = 'myScore'
+  const SCORE_ME = 'myscore'
   const LEADER_BOARD = 'leaderboard'
   const HANGMAN = 'hangman'
   const SINGLE_PLAYER = 'singleplayer'

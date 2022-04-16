@@ -1,3 +1,11 @@
+const sendEmbed = (msg,embed) => {
+  if(msg.type === "APPLICATION_COMMAND" && !msg.replied){
+    return msg.reply({embeds:[embed]})
+  }else{
+    return msg.channel.send({embeds:[embed]})
+  }   
+}
+
 exports.welcomeEmbed = (msg,prefix) => {
 
   const embed = {
@@ -76,11 +84,7 @@ exports.leaderBoardEmbed = (msg,data,author=null) => {
       text: "© hangman"
     }
     }
-    if(msg.type === "APPLICATION_COMMAND" && !msg.replied){
-      return msg.reply({embeds:[embed]})
-    }else{
-      return msg.channel.send({embeds:[embed]})
-    }
+    sendEmbed(msg,embed)
   }
 };
 exports.helpMessage = (msg,prefix) => {
@@ -112,30 +116,27 @@ exports.helpMessage = (msg,prefix) => {
   }
     return msg.channel.send({ embeds: [embed] });
 };
-exports.singleUserData = (msg,score,position) => {
+exports.singleUserData = (msg,score,position,author=null) => {
+  const user = author ? author : msg.author
   const embed = {
     author:{name:msg.guild.name,
       icon_url: msg.guild.iconURL},
     url: "https://discordapp.com",
     description: "Score is calculated based on tries left at the end of game",
     // color:"3447003",
-    title:`${msg.author.username} your Score is:`,
+    title:`${user.username} your Score is:`,
     color:'332391',
     fields:[
-      {name:"Your Score",value:score,inline:true},
+      {name:"Your Score",value:`${score}`,inline:true},
       {name:"LeaderBoard position",value:`${position}`,inline:true}
     ],
     timestamp: new Date(),
     footer: {
-      icon_url: msg.author.avatarURL,
+      icon_url: user.avatarURL,
       text: "© hangman"
     }
   }
-  if(msg.type === "APPLICATION_COMMAND" && !msg.replied){
-    return msg.reply({embeds:[embed]})
-  }else{
-    return msg.channel.send({embeds:[embed]})
-  }
+  sendEmbed(msg,embed)
 }
 
 
