@@ -1,6 +1,7 @@
 const hangMan = require('../services/hangman')
 const messageEmbeds = require('../utils/messageEmbeds')
 const Genre = require('../services/Genre');
+const { getMoviesList, getRandomMovie } = require('../services/movies');
 
 
 exports.hangmanMessageHandler = async (msg, filter, prefix, cat) => {
@@ -26,7 +27,7 @@ exports.hangmanMessageHandler = async (msg, filter, prefix, cat) => {
   playerId = mode.author.id;
   if (mode.content === "1") {
     try {
-      var randomMovieE = getMoviesList(cat)
+      var randomMovieE = await getMoviesList(cat)
     } catch (err) { source = 'LOCAL' }
 
     const randomMovieDetail = getRandomMovie(source,randomMovieE)

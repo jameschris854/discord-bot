@@ -5,6 +5,7 @@ const hangmanMessageHandler = require('../messagehandlers/hangmanMessageHandler'
 const configMessageHandler = require('../messagehandlers/cofigMessageHandler');
 const hangman = require("../services/hangmanClass");
 const lbMessageHandler = require('../messagehandlers/lbMessageHandler');
+const messageEmbeds = require('../utils/messageEmbeds')
 
 exports.messageHandler =  async (msg) => { 
 
@@ -98,7 +99,7 @@ exports.messageHandler =  async (msg) => {
       player1.ans()
       player1.askGuess()
     }
-    
+
     process.on("uncaughtException", (evt) => { 
       if(evt.code === 'ERR_UNHANDLED_REJECTION'){
         console.log(evt);

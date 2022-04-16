@@ -12,7 +12,7 @@ exports.hangmanInteractionHandler = async (interaction, cat) => {
   playerId = interaction.user.id;
   if (gameMode === "1") {
     try {
-      var randomMovieE = getMoviesList(cat)
+      var randomMovieE = await getMoviesList(cat)
     } catch (err) { source = 'LOCAL' }
 
     const randomMovieDetail = getRandomMovie(source,randomMovieE)

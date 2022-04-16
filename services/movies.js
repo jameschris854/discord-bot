@@ -1,6 +1,7 @@
-const { default: axios } = require("axios");
+const axios = require("axios");
 const config = require("../config/config");
-const localMovieData = require('../public/data/movieName.json')
+const localMovieData = require('../public/data/movieName.json');
+const { rand } = require("../utils/commonUtil");
 
 const getMoviesList = async (cat = null) => {
     try {
@@ -34,7 +35,7 @@ const getRandomMovie = (source,randomMovieE) => {
         movieEImg = 'none'
     }
 
-    return {movie: movieE,img:movieEImg}
+    return {name:movieE,img:movieEImg}
 }
 
 
