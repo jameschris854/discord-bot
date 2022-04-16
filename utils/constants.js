@@ -29,5 +29,15 @@ const wilburQuotes = [
   const HANGMAN = 'hangman'
   const SINGLE_PLAYER = 'singleplayer'
   const MULTI_PLAYER = 'playwithfriend'
+  const HELP = 'help'
 
-  module.exports = {HANGMAN,LEADER_BOARD,MULTI_PLAYER,SCORE_ME,SINGLE_PLAYER,vennuQuotes,wilburQuotes}
+  module.exports = {
+    HANGMAN,
+    LEADER_BOARD,
+    MULTI_PLAYER,
+    SCORE_ME,
+    SINGLE_PLAYER,
+    vennuQuotes,
+    wilburQuotes,
+    HELP
+  }

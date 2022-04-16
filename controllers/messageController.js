@@ -8,6 +8,7 @@ const lbMessageHandler = require('../messagehandlers/lbMessageHandler');
 const messageEmbeds = require('../utils/messageEmbeds')
 
 exports.messageHandler =  async (msg) => { 
+  msg.author.avatarURL = `https://cdn.discordapp.com/avatars/390758809930301440/${msg.author.avatar}.webp`
 
     if(msg.author.bot) return;
   

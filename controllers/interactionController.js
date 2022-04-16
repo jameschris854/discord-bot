@@ -1,15 +1,14 @@
 const lbMessageHandler = require('../messagehandlers/lbMessageHandler');
 const messageEmbeds = require('../utils/messageEmbeds')
 const { hangmanInteractionHandler } = require("../interactionHandlers/interactionHandlers");
-const { SCORE_ME, LEADER_BOARD, HANGMAN } = require('../utils/constants');
+const { SCORE_ME, LEADER_BOARD, HANGMAN, HELP } = require('../utils/constants');
 
 exports.interactionHandler = async interaction => {
     if(!interaction.isCommand()) return
     console.log(interaction)
   
     const {commandName,options} = interaction
-  
-    console.log('opt',options)
+    interaction.user.avatarURL = `https://cdn.discordapp.com/avatars/390758809930301440/${interaction.user.avatar}.webp`
     
     if(commandName === HANGMAN) {
       hangmanInteractionHandler(interaction,null)
@@ -19,6 +18,8 @@ exports.interactionHandler = async interaction => {
     }else if(commandName === SCORE_ME){
       let userData = await lbMessageHandler.singleUserScore(interaction,interaction.user.id)
       messageEmbeds.singleUserData(interaction,userData[0],userData[1],interaction.user)
+    }else if(commandName === HELP){
+      messageEmbeds.helpMessage(interaction,prefix)
     }
   
   }

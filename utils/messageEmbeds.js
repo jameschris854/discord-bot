@@ -88,6 +88,7 @@ exports.leaderBoardEmbed = (msg,data,author=null) => {
   }
 };
 exports.helpMessage = (msg,prefix) => {
+  const author = msg.type === "APPLICATION_COMMAND" ? msg.user : msg.author
   const embed = {
     author:{name:msg.guild.name,
       icon_url: msg.guild.iconURL},
@@ -110,11 +111,11 @@ exports.helpMessage = (msg,prefix) => {
     ],
     timestamp: new Date(),
   footer: {
-    icon_url: msg.author.avatarURL,
+    icon_url: author.avatarURL,
     text: "© hangman"
   }
   }
-    return msg.channel.send({ embeds: [embed] });
+    return sendEmbed(msg,embed)
 };
 exports.singleUserData = (msg,score,position,author=null) => {
   const user = author ? author : msg.author

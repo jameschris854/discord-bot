@@ -21,7 +21,7 @@ if(config.IS_PROD === "true"){
 const mongoose = require('mongoose')
 const lbMessageHandler = require('./messagehandlers/lbMessageHandler');
 const Genre = require("./services/Genre");
-const { LEADER_BOARD, SCORE_ME, HANGMAN, SINGLE_PLAYER, MULTI_PLAYER } = require("./utils/constants");
+const { LEADER_BOARD, SCORE_ME, HANGMAN, SINGLE_PLAYER, MULTI_PLAYER, HELP } = require("./utils/constants");
 let prefix = '-'
 ///////////////////LOGGING IN BOT ///////////////////////////////////////
 
@@ -55,6 +55,8 @@ bot.on("ready", () => {
     ]})
     slash.create({name: LEADER_BOARD, description: 'shows leaderboard for your server.'})
     slash.create({name: SCORE_ME, description: 'Shows your current score in leaderboard.'})
+    slash.create({name: HELP, description: 'Shows all commands and more.'})
+
 });
 
 
