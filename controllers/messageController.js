@@ -71,7 +71,6 @@ exports.messageHandler =  async (msg) => {
     }
     else if(msg.content.toLowerCase() === `${prefix}leaderboard`)
     {  
-      console.log('leaderboard');
       lbMessageHandler.isDbCreated(msg)
       console.log(msg.guild.id);
       let data  = await lbMessageHandler.showLeaderBoard(msg)
@@ -80,7 +79,6 @@ exports.messageHandler =  async (msg) => {
     }
     else if(msg.content.toLowerCase() === `${prefix}stats` )
     {
-      console.log(random.int((min=1),(max=10)));
       msg.channel.send(`server count : ${bot.guilds.cache.size}\nactive users ${bot.users.cache.size}\nchannels ${bot.channels.cache.size}`)
         
     }

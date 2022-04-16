@@ -21,6 +21,7 @@ if(config.IS_PROD === "true"){
 const mongoose = require('mongoose')
 const lbMessageHandler = require('./messagehandlers/lbMessageHandler');
 const Genre = require("./services/Genre");
+const { LEADER_BOARD, SCORE_ME, HANGMAN, SINGLE_PLAYER, MULTI_PLAYER } = require("./utils/constants");
 let prefix = '-'
 ///////////////////LOGGING IN BOT ///////////////////////////////////////
 
@@ -48,12 +49,12 @@ bot.on("ready", () => {
       const guild = bot.guilds.cache.get('838022479250456576')
       slash = guild.commands
     }
-    slash.create({name: 'hangman', description: 'play a guessing game with random movies',options:[
-      {name:'singleplayer',description:'let bot give you a random movie.',type:Discord.Constants.ApplicationCommandOptionTypes.SUB_COMMAND},
-      {name:'playwithafriend',description:'let your friend give you a movie to guess',type:Discord.Constants.ApplicationCommandOptionTypes.SUB_COMMAND}
+    slash.create({name: HANGMAN, description: 'play a guessing game with random movies',options:[
+      {name:SINGLE_PLAYER,description:'let bot give you a random movie.',type:Discord.Constants.ApplicationCommandOptionTypes.SUB_COMMAND},
+      {name:MULTI_PLAYER,description:'let your friend give you a movie to guess',type:Discord.Constants.ApplicationCommandOptionTypes.SUB_COMMAND}
     ]})
-    slash.create({name: 'leaderboard', description: 'shows leaderboard for your server.'})
-
+    slash.create({name: LEADER_BOARD, description: 'shows leaderboard for your server.'})
+    slash.create({name: SCORE_ME, description: 'Shows your current score in leaderboard.'})
 });
 
 

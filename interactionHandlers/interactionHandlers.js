@@ -1,12 +1,13 @@
 const hangMan = require('../services/hangman')
 const { getMoviesList, getRandomMovie } = require('../services/movies');
+const { SINGLE_PLAYER, MULTI_PLAYER } = require('../utils/constants');
 
 exports.hangmanInteractionHandler = async (interaction, cat) => {
   gameMode = '1'
   source = 'API'
-  if (interaction.options.getSubcommand() === 'singleplayer') {
+  if (interaction.options.getSubcommand() === SINGLE_PLAYER) {
     gameMode = '1'
-  } else if (interaction.options.getSubcommand() === 'singleplayer') {
+  } else if (interaction.options.getSubcommand() === MULTI_PLAYER) {
     gameMode = '2'
   }
   playerId = interaction.user.id;

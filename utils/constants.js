@@ -1,4 +1,4 @@
-export const vennuQuotes = [
+const vennuQuotes = [
     "Hey are U going to Sing ???",
     "Its My Life..",
     "If U live like that do U know what people think about U ???..",
@@ -9,7 +9,7 @@ export const vennuQuotes = [
     "I am a Heart Stealer...",
   ]; 
 
-export const wilburQuotes = [
+const wilburQuotes = [
     "first class ???",
     "wilbur mode..",
     "im a good citizen ???..",
@@ -23,3 +23,11 @@ export const wilburQuotes = [
     "Cobra to the right",
     "Say Cobra Cobra",
   ];
+
+  const SCORE_ME = 'myScore'
+  const LEADER_BOARD = 'leaderboard'
+  const HANGMAN = 'hangman'
+  const SINGLE_PLAYER = 'singleplayer'
+  const MULTI_PLAYER = 'playwithfriend'
+
+  module.exports = {HANGMAN,LEADER_BOARD,MULTI_PLAYER,SCORE_ME,SINGLE_PLAYER,vennuQuotes,wilburQuotes}
