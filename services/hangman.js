@@ -50,7 +50,11 @@ exports.hangmanLogic = async (msg,movieName,movieImg,id) => {
       //       .replace(/,/g, " ")} | Tries left:${tries} ⏳ | Timer ${timeLeft}`
       //   );
       // }, 1000);
-      msg.channel.send("Enter a guess ⁉️ -");
+      if(msg.type === "APPLICATION_COMMAND" && !msg.replied){
+        msg.reply({content: 'Enter a guess ⁉️ -'})
+      }else{
+        msg.channel.send("Enter a guess ⁉️ -");
+      }
       try {
         guessOn = await msg.channel.awaitMessages({filter,
           max: 1,
@@ -121,7 +125,7 @@ exports.hangmanLogic = async (msg,movieName,movieImg,id) => {
           messageEmbeds.urlFileEmbed(msg,`⚰️better luck next time 🫂`,`The right answer is ${movieName.toUpperCase()} \n  ⏯️To start a new game use the command hangman`,`${movieImg}`)
           return null
         }
-      lbMessageHandler.updateUserScore(msg.guild.id,msg.author.id,tries,'lost')
+      lbMessageHandler.updateUserScore(msg.guild.id,id,tries,'lost')
       messageEmbeds.textFileEmbed(msg,`⚰️better luck next time 🫂`,`The right answer is ${movieName.toUpperCase()} \n  ⏯️To start a new game use the command hangman`,`${movieImg}`)
     }
   };

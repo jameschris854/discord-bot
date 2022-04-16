@@ -24,11 +24,12 @@ exports.welcomeEmbed = (msg,prefix) => {
    return msg.channel.send({embeds:[embed],files: ["./public/img/hangmanIntro.jpg"]
   })
 }
-exports.leaderBoardEmbed = (msg,data) => {
+exports.leaderBoardEmbed = (msg,data,author=null) => {
     let userNames= data[0]
     let score = data[1]
     let scoreAuth = data[2]
     let position = data[3]
+    let user = author ? author : msg.author
     console.log('position'+position,scoreAuth);
   if(position < 11 || scoreAuth === 'ignore'){
     const embed = {
@@ -45,12 +46,15 @@ exports.leaderBoardEmbed = (msg,data) => {
       ],
       timestamp: new Date(),
     footer: {
-      icon_url: msg.author.avatarURL,
+      icon_url: user.avatarURL,
       text: "© hangman"
     }
     }
-    return msg.channel.send({embeds:[embed]
-    })
+    if(msg.type === "APPLICATION_COMMAND" && !msg.replied){
+      return msg.reply({embeds:[embed]})
+    }else{
+      return msg.channel.send({embeds:[embed]})
+    }    
   }else{
     const embed = {
       author:{name:msg.guild.name,
@@ -63,16 +67,20 @@ exports.leaderBoardEmbed = (msg,data) => {
       fields:[
         {name:"Name",value:userNames,inline:true},
         {name:"Score",value:score,inline:true},
-        {name:"You",value:`\`{position}\`${msg.author.username}`,inline:true},
+        {name:"You",value:`\`{position}\`${user.username}`,inline:true},
         {name:'score',value:`${scoreAuth}`}
       ],
       timestamp: new Date(),
     footer: {
-      icon_url: msg.author.avatarURL,
+      icon_url: user.avatarURL,
       text: "© hangman"
     }
     }
-    return msg.channel.send({embeds:[embed]})
+    if(msg.type === "APPLICATION_COMMAND" && !msg.replied){
+      return msg.reply({embeds:[embed]})
+    }else{
+      return msg.channel.send({embeds:[embed]})
+    }
   }
 };
 exports.helpMessage = (msg,prefix) => {
@@ -123,7 +131,11 @@ exports.singleUserData = (msg,score,position) => {
       text: "© hangman"
     }
   }
-  return msg.channel.send({embeds:[embed]})
+  if(msg.type === "APPLICATION_COMMAND" && !msg.replied){
+    return msg.reply({embeds:[embed]})
+  }else{
+    return msg.channel.send({embeds:[embed]})
+  }
 }
 
 

@@ -22,11 +22,11 @@ exports.createTestGuild = async (data) => {
     let doc = await lbSchema.create(data)
     console.log(doc);
 }
-exports.showLeaderBoard = async (msg) => 
+exports.showLeaderBoard = async (msg,authorId=null) => 
 {
     let guildId = msg.guild.id
     let data = await lbSchema.findOne({_guildId:guildId})
-    let author = msg.author.id
+    let author = authorId ? authorId : msg.author.id
     let position = 0;
     let scoreAuth = 'ignore'
     console.log('show leaderboard');

@@ -1,39 +1,24 @@
 const hangMan = require('../services/hangman')
-const messageEmbeds = require('../utils/messageEmbeds')
-const Genre = require('../services/Genre');
+const { getMoviesList, getRandomMovie } = require('../services/movies');
 
-
-exports.hangmanMessageHandler = async (msg, filter, prefix, cat) => {
+exports.hangmanInteractionHandler = async (interaction, cat) => {
   gameMode = '1'
   source = 'API'
-
-  messageEmbeds.welcomeEmbed(msg, prefix)
-
-  try {
-    gameMode = await msg.channel.awaitMessages({
-      filter,
-      max: 1,
-      time: 20000,
-      errors: ["time"]
-    }
-    )
-  } catch (err) {
-    msg.channel.send('Connection timed out,please try again:no_mouth: ')
-    return null
+  if (interaction.options.getSubcommand() === 'singleplayer') {
+    gameMode = '1'
+  } else if (interaction.options.getSubcommand() === 'singleplayer') {
+    gameMode = '2'
   }
-
-  const mode = gameMode.first();
-  playerId = mode.author.id;
-  if (mode.content === "1") {
+  playerId = interaction.user.id;
+  if (gameMode === "1") {
     try {
       var randomMovieE = getMoviesList(cat)
     } catch (err) { source = 'LOCAL' }
 
     const randomMovieDetail = getRandomMovie(source,randomMovieE)
-    
-    hangMan.hangmanLogic(msg, randomMovieDetail.name, randomMovieDetail.img, playerId);
+    hangMan.hangmanLogic(interaction, randomMovieDetail.name, randomMovieDetail.img, playerId);
 
-  } else if (mode.content === "2") {
+  } else if (gameMode === "2") {
     try {
       await msg.author.send("player-1 : Enter the movie name");
       getMovie = await msg.author.dmChannel.awaitMessages({
@@ -69,16 +54,6 @@ exports.hangmanMessageHandler = async (msg, filter, prefix, cat) => {
       msg.channel.send('Connection timed out,please try again:no_mouth: ')
       return null
     }
-  }
-}
-
-exports.hangmanCategoryMessageHandler = async (msg, filter, prefix) => {
-  const category = msg.content.split(' ')[1]
-  const genreId = Genre.getGenreId(category)
-  if (genreId) {
-    this.hangmanMessageHandler(msg, filter, prefix, category)
-  } else {
-    messageEmbeds.noGenreErrorMsg(msg)
   }
 }
 

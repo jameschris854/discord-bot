@@ -1,6 +1,6 @@
-require("dotenv").config();
-
 const Discord = require("discord.js");
+const config = require('./config/config')
+
 const bot = new Discord.Client({
   intents:
     [
@@ -10,7 +10,14 @@ const bot = new Discord.Client({
       Discord.Intents.FLAGS.GUILD_MEMBERS,
     ]
 });
-const TOKEN = process.env.TOKEN;
+
+let TOKEN 
+if(config.IS_PROD === "true"){
+  TOKEN = config.TOKEN_PROD;
+}else{
+  TOKEN = config.TOKEN_TEST
+}
+
 const mongoose = require('mongoose')
 const lbMessageHandler = require('./messagehandlers/lbMessageHandler');
 const Genre = require("./services/Genre");
@@ -32,6 +39,21 @@ bot.on("ready", () => {
     bot.user.setActivity(`${prefix}help in ${bot.guilds.cache.size} guilds`,{type: "WATCHING"})
   let channelData =  bot.channels.cache.get('862197552350232587');
   exports.testChannel = channelData
+
+    // creating event to listen to slash commands.
+    let slash
+    if(config.IS_PROD === "true"){
+      slash = bot.application.commands
+    }else{
+      const guild = bot.guilds.cache.get('838022479250456576')
+      slash = guild.commands
+    }
+    slash.create({name: 'hangman', description: 'play a guessing game with random movies',options:[
+      {name:'singleplayer',description:'let bot give you a random movie.',type:Discord.Constants.ApplicationCommandOptionTypes.SUB_COMMAND},
+      {name:'playwithafriend',description:'let your friend give you a movie to guess',type:Discord.Constants.ApplicationCommandOptionTypes.SUB_COMMAND}
+    ]})
+    slash.create({name: 'leaderboard', description: 'shows leaderboard for your server.'})
+
 });
 
 
@@ -48,9 +70,9 @@ bot.on('guildDelete', (guild) => {
 
 
 
-const DB = process.env.DATABASE.replace(
+const DB = config.DATABASE.replace(
   '<PASSWORD>',
-  process.env.DB_PASSWORD
+  config.DB_PASSWORD
 );
 
 mongoose
