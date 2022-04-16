@@ -30,6 +30,7 @@ const wilburQuotes = [
   const SINGLE_PLAYER = 'singleplayer'
   const MULTI_PLAYER = 'playwithfriend'
   const HELP = 'help'
+  const CONFIG = 'config'
 
   module.exports = {
     HANGMAN,
@@ -39,5 +40,6 @@ const wilburQuotes = [
     SINGLE_PLAYER,
     vennuQuotes,
     wilburQuotes,
-    HELP
+    HELP,
+    CONFIG
   }

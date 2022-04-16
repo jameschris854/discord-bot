@@ -92,12 +92,6 @@ exports.messageHandler =  async (msg) => {
       let filter = (m) => m.author.id === msg.author.id;
       configMessageHandler.changePrefix(msg.guild.id,msg,filter)
     }
-    else if(msg.content.toLowerCase() === `${prefix}class`){
-      let filter = (m) => m.author.id === msg.author.id;
-      player1 =new hangman('msg','the shinning','url','adasdadasd')
-      player1.ans()
-      player1.askGuess()
-    }
 
     process.on("uncaughtException", (evt) => { 
       if(evt.code === 'ERR_UNHANDLED_REJECTION'){
