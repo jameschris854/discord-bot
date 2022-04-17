@@ -1,5 +1,10 @@
 const Discord = require("discord.js");
 const config = require('./config/config')
+const mongoose = require('mongoose')
+const lbMessageHandler = require('./messagehandlers/lbMessageHandler');
+const Genre = require("./services/Genre");
+const { LEADER_BOARD, SCORE_ME, HANGMAN, SINGLE_PLAYER, MULTI_PLAYER, HELP, CONFIG, CATEGORY, SECRET, PLAYER_TWO } = require("./utils/constants");
+const applicationCommandType = Discord.Constants.ApplicationCommandOptionTypes
 
 const bot = new Discord.Client({
   intents:
@@ -11,52 +16,63 @@ const bot = new Discord.Client({
     ]
 });
 
-let TOKEN 
-if(config.IS_PROD === "true"){
+let TOKEN
+if (config.IS_PROD === "true") {
   TOKEN = config.TOKEN_PROD;
-}else{
+} else {
   TOKEN = config.TOKEN_TEST
 }
 
-const mongoose = require('mongoose')
-const lbMessageHandler = require('./messagehandlers/lbMessageHandler');
-const Genre = require("./services/Genre");
-const { LEADER_BOARD, SCORE_ME, HANGMAN, SINGLE_PLAYER, MULTI_PLAYER, HELP, CONFIG } = require("./utils/constants");
 let prefix = '-'
+
 ///////////////////LOGGING IN BOT ///////////////////////////////////////
 
 bot.login(TOKEN);
 
 //bot ready and logged in
 console.log(bot.user)
-bot.on("ready", () => {
-  //get genres list from movie db
-  Genre.getGenres().then(() => console.log(Genre.movieGenreList))
-
+bot.on("ready", async () => {
   console.info(`Bot has started, with 
   ${bot.users.cache.size} users, in 
   ${bot.channels.cache.size} channels of 
   ${bot.guilds.cache.size} guilds.`)
-    bot.user.setActivity(`${prefix}help in ${bot.guilds.cache.size} guilds`,{type: "WATCHING"})
-  let channelData =  bot.channels.cache.get('862197552350232587');
+  bot.user.setActivity(`${prefix}help in ${bot.guilds.cache.size} guilds`, { type: "WATCHING" })
+  let channelData = bot.channels.cache.get('862197552350232587');
   exports.testChannel = channelData
 
-    // creating event to listen to slash commands.
-    let slash
-    if(config.IS_PROD === "true"){
-      slash = bot.application.commands
-    }else{
-      const guild = bot.guilds.cache.get('838022479250456576')
-      slash = guild.commands
-    }
-    slash.create({name: HANGMAN, description: 'play a guessing game with random movies',options:[
-      {name:SINGLE_PLAYER,description:'let bot give you a random movie.',type:Discord.Constants.ApplicationCommandOptionTypes.SUB_COMMAND},
-      {name:MULTI_PLAYER,description:'let your friend give you a movie to guess',type:Discord.Constants.ApplicationCommandOptionTypes.SUB_COMMAND}
-    ]})
-    slash.create({name: LEADER_BOARD, description: 'shows leaderboard for your server.'})
-    slash.create({name: SCORE_ME, description: 'Shows your current score in leaderboard.'})
-    slash.create({name: HELP, description: 'Shows all commands and more.'})
-    slash.create({name: CONFIG, description:'Edit server prefix.'})
+  // creating event to listen to slash commands.
+  let slash
+  if (config.IS_PROD === "true") {
+    slash = bot.application.commands
+  } else {
+    const guild = bot.guilds.cache.get('838022479250456576')
+    slash = guild.commands
+  }
+
+  //get genres list from movie db
+  await Genre.getGenres()
+  console.log(Genre.movieGenreList)
+  slash.create({
+    name: HANGMAN, description: 'play a guessing game with random movies', options: [
+      {
+        name: SINGLE_PLAYER, description: 'let bot give you a random movie.', type: applicationCommandType.SUB_COMMAND,
+        options: [{
+          name: CATEGORY, description: 'choose movie category', type: applicationCommandType.STRING, choices: [...Genre.movieGenreList.map((g) => { return { name: g.name, value: g.name } })]
+        }]
+      },
+      {
+        name: MULTI_PLAYER, description: 'Give your friend a movie to guess.', type: applicationCommandType.SUB_COMMAND,
+        options: [
+          { name: SECRET, description: 'movie name for your friend to guess.', type: applicationCommandType.STRING, required: true },
+          { name: PLAYER_TWO, description: 'select player 2 to start the game.', type: applicationCommandType.USER, required: true }
+        ]
+      }
+    ]
+  })
+  slash.create({ name: LEADER_BOARD, description: 'shows leaderboard for your server.' })
+  slash.create({ name: SCORE_ME, description: 'Shows your current score in leaderboard.' })
+  slash.create({ name: HELP, description: 'Shows all commands and more.' })
+  slash.create({ name: CONFIG, description: 'Edit server prefix.' })
 });
 
 

@@ -1,6 +1,6 @@
 const hangMan = require('../services/hangman')
 const { getMoviesList, getRandomMovie } = require('../services/movies');
-const { SINGLE_PLAYER, MULTI_PLAYER } = require('../utils/constants');
+const { SINGLE_PLAYER, MULTI_PLAYER, SECRET, PLAYER_TWO } = require('../utils/constants');
 
 exports.hangmanInteractionHandler = async (interaction, cat) => {
   gameMode = '1'
@@ -21,38 +21,21 @@ exports.hangmanInteractionHandler = async (interaction, cat) => {
 
   } else if (gameMode === "2") {
     try {
-      await msg.author.send("player-1 : Enter the movie name");
-      getMovie = await msg.author.dmChannel.awaitMessages({
-        filter,
-        max: 1,
-        time: 60000,
-        errors: ["time"],
-      });
+      await interaction.reply("game started");
 
-      const movie = getMovie.first();
+      console.log('iiasdas    /n',interaction.options.getUser('playertwo'))
 
-      await msg.channel.send('player-2: type "start" to play');
-      let filter2p = (m) => !(m.author.bot)
-      player2 = await msg.channel.awaitMessages({
-        filter: filter2p,
-        max: 1,
-        time: 30000,
-        errors: ["time"],
-      });
+      const movie = interaction.options.getString(SECRET)
 
-      let player2f = await player2.first();
-
-      console.log(player2f.content);
-
-      let playerTwo = player2f.author.id;
+      let playerTwo = interaction.options.getUser(PLAYER_TWO).id
 
       // let image = 'https://i.gifer.com/Kfde.gif'
       let image = 'none'
+      hangMan.hangmanLogic(interaction, movie, image, playerTwo);
 
-      hangMan.hangmanLogic(msg, movie.content, image, playerTwo);
     } catch (err) {
       console.log(err.message);
-      msg.channel.send('Connection timed out,please try again:no_mouth: ')
+      interaction.channel.send('Connection timed out,please try again:no_mouth: ')
       return null
     }
   }

@@ -27,11 +27,14 @@ const wilburQuotes = [
   const SCORE_ME = 'myscore'
   const LEADER_BOARD = 'leaderboard'
   const HANGMAN = 'hangman'
-  const SINGLE_PLAYER = 'singleplayer'
-  const MULTI_PLAYER = 'playwithfriend'
+  const SINGLE_PLAYER = 'single-player'
+  const MULTI_PLAYER = 'multi-player'
   const HELP = 'help'
   const CONFIG = 'config'
-
+  const CATEGORY = 'category'
+  const SECRET = 'secret'
+  const PLAYER_TWO = 'playertwo'
+  
   module.exports = {
     HANGMAN,
     LEADER_BOARD,
@@ -41,5 +44,8 @@ const wilburQuotes = [
     vennuQuotes,
     wilburQuotes,
     HELP,
-    CONFIG
+    CONFIG,
+    CATEGORY,
+    PLAYER_TWO,
+    SECRET
   }

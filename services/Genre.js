@@ -11,6 +11,7 @@ class Genre {
                 `https://api.themoviedb.org/3/genre/movie/list?api_key=${config.TMDB_API_KEY}&language=en-US`
             )
             this.movieGenreList = genres.data.genres
+            return
         }catch(e){
             console.error('could not get genres ...',e)
         }

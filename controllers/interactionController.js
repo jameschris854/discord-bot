@@ -1,7 +1,7 @@
 const lbMessageHandler = require('../messagehandlers/lbMessageHandler');
 const messageEmbeds = require('../utils/messageEmbeds')
 const { hangmanInteractionHandler } = require("../interactionHandlers/interactionHandlers");
-const { SCORE_ME, LEADER_BOARD, HANGMAN, HELP ,CONFIG } = require('../utils/constants');
+const { SCORE_ME, LEADER_BOARD, HANGMAN, HELP ,CONFIG, MULTI_PLAYER, SINGLE_PLAYER, CATEGORY } = require('../utils/constants');
 const configInteractionHandler = require('../interactionHandlers/configInteractionHandler');
 
 exports.interactionHandler = async interaction => {
@@ -12,7 +12,12 @@ exports.interactionHandler = async interaction => {
     interaction.user.avatarURL = `https://cdn.discordapp.com/avatars/390758809930301440/${interaction.user.avatar}.webp`
     
     if(commandName === HANGMAN) {
-      hangmanInteractionHandler(interaction,null)
+      if(interaction.options.getSubcommand() === SINGLE_PLAYER){
+        const cat = interaction.options.getString(CATEGORY)
+        hangmanInteractionHandler(interaction,cat)
+      }else if(interaction.options.getSubcommand() === MULTI_PLAYER){
+        hangmanInteractionHandler(interaction,null)
+      }
     } else if(commandName === LEADER_BOARD) {
       const data = await lbMessageHandler.showLeaderBoard(interaction,interaction.user)
       messageEmbeds.leaderBoardEmbed(interaction,data,interaction.user.id)
