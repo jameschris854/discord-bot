@@ -25,7 +25,6 @@ exports.welcomeEmbed = (msg,prefix) => {
         
     timestamp: new Date(),
   footer: {
-    icon_url: msg.author.avatarURL,
     text: "© hangman"
   },
   }
@@ -54,7 +53,6 @@ exports.leaderBoardEmbed = (msg,data,author=null) => {
       ],
       timestamp: new Date(),
     footer: {
-      icon_url: user.avatarURL,
       text: "© hangman"
     }
     }
@@ -80,7 +78,6 @@ exports.leaderBoardEmbed = (msg,data,author=null) => {
       ],
       timestamp: new Date(),
     footer: {
-      icon_url: user.avatarURL,
       text: "© hangman"
     }
     }
@@ -111,7 +108,6 @@ exports.helpMessage = (msg,prefix) => {
     ],
     timestamp: new Date(),
   footer: {
-    icon_url: author.avatarURL,
     text: "© hangman"
   }
   }
@@ -133,7 +129,6 @@ exports.singleUserData = (msg,score,position,author=null) => {
     ],
     timestamp: new Date(),
     footer: {
-      icon_url: user.avatarURL,
       text: "© hangman"
     }
   }

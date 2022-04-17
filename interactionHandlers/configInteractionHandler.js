@@ -5,7 +5,7 @@ exports.changePrefix =async  (guildId,msg,filter) => {
     if (msg.member.permissions.has("ADMINISTRATOR")) {
        console.log('THIS USER HAS ADMINISTRATOR PERMISSIONS!')
     }else{
-       msg.channel.send(`you have to be an admin to change prefix:detective: `)
+       msg.reply(`you have to be an admin to change prefix:detective: `)
        return null
     }
       msg.reply(`\`\`                 🤖    CONFIG    🤖                  \n Enter new prefix for your server:                    \`\``)

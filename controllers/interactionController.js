@@ -9,7 +9,7 @@ exports.interactionHandler = async interaction => {
     console.log(interaction)
   
     const {commandName,options} = interaction
-    interaction.user.avatarURL = `https://cdn.discordapp.com/avatars/390758809930301440/${interaction.user.avatar}.webp`
+    // interaction.user.avatarURL = `https://cdn.discordapp.com/avatars/${interaction.user.id}/${interaction.user.avatar}.webp`
     
     if(commandName === HANGMAN) {
       if(interaction.options.getSubcommand() === SINGLE_PLAYER){

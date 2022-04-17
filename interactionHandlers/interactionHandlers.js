@@ -21,13 +21,11 @@ exports.hangmanInteractionHandler = async (interaction, cat) => {
 
   } else if (gameMode === "2") {
     try {
-      await interaction.reply("game started");
-
-      console.log('iiasdas    /n',interaction.options.getUser('playertwo'))
-
-      const movie = interaction.options.getString(SECRET)
-
       let playerTwo = interaction.options.getUser(PLAYER_TWO).id
+      
+      const movie = interaction.options.getString(SECRET)
+      
+      await interaction.reply(`@${ interaction.options.getUser(PLAYER_TWO).username} can start guessing!!`);
 
       // let image = 'https://i.gifer.com/Kfde.gif'
       let image = 'none'
