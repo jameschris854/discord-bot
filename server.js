@@ -10,7 +10,14 @@ const bot = new Discord.Client({
       Discord.Intents.FLAGS.GUILD_MEMBERS,
     ]
 });
-const TOKEN = process.env.TOKEN;
+
+let TOKEN 
+if(process.env.IS_PROD === "true"){
+  TOKEN = process.env.TOKEN_PROD;
+}else{
+  TOKEN = process.env.TOKEN_TEST
+}
+
 const mongoose = require('mongoose')
 const lbMessageHandler = require('./messagehandlers/lbMessageHandler');
 const Genre = require("./services/Genre");
