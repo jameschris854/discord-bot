@@ -8,7 +8,7 @@ const configMessageHandler = require('./messagehandlers/cofigMessageHandler');
 const hangman = require("./services/hangmanClass");
 const express = require('express');
 const app = express();
-const port = 3000;
+const port = process.env.PORT || 3000
 const EventEmitter = require('events');
 const myEE = new EventEmitter();
 myEE.setMaxListeners(0);
