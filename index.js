@@ -10,7 +10,7 @@ const myEE = new EventEmitter();
 myEE.setMaxListeners(0);
 const express = require('express')
 const app = express()
-const port = 3000 || process.env.PORT
+const port = process.env.PORT || 3000
 
 const vennuQuotes = [
   "Hey are U going to Sing ???",
