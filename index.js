@@ -8,6 +8,9 @@ const hangman = require("./services/hangmanClass");
 const EventEmitter = require('events');
 const myEE = new EventEmitter();
 myEE.setMaxListeners(0);
+const express = require('express')
+const app = express()
+const port = 3000 || process.env.PORT
 
 const vennuQuotes = [
   "Hey are U going to Sing ???",
@@ -161,3 +164,12 @@ myEE.on(sym, () => {});
 
 console.log(myEE.eventNames());
 // Prints: [ 'foo', 'bar', Symbol(symbol) 
+
+app.get('/',(req,res,next) => {
+  res.send('<div>Hangman</div>')
+  next()
+})
+
+app.listen(port,() => {
+  console.log('server started at',port)
+})
