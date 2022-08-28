@@ -1,14 +1,10 @@
 const random = require("random");
-const Scraper = require("images-scraper");
 const bot = require('./server')
 const hangmanMessageHandler = require('./messagehandlers/hangmanMessageHandler')
 const lbMessageHandler = require('./messagehandlers/lbMessageHandler');
 const messageEmbeds = require('./utils/messageEmbeds')
 const configMessageHandler = require('./messagehandlers/cofigMessageHandler');
 const hangman = require("./services/hangmanClass");
-const express = require('express');
-const app = express();
-const port = process.env.PORT || 3000
 const EventEmitter = require('events');
 const myEE = new EventEmitter();
 myEE.setMaxListeners(0);
@@ -71,11 +67,7 @@ bot.on("messageCreate", async (msg) => {
     /////////// /////////////////generating quotes//////////////////////////////
     msg.reply(Quotes[NoQ]);
     const url = () => {
-      const google = new Scraper({
-        puppeteer: {
-          headless: true,
-        },
-      });
+      const google = null
 
       ////////////////////////// generating image/////////////////////////
       (async () => {
@@ -169,8 +161,3 @@ myEE.on(sym, () => {});
 
 console.log(myEE.eventNames());
 // Prints: [ 'foo', 'bar', Symbol(symbol) 
-
-app.get('/', (req, res) => res.send(
-  '<!-- Global site tag (gtag.js) - Google Analytics --><script async src="https://www.googletagmanager.com/gtag/js?id=G-7L1D36S69D"></script><script>window.dataLayer = window.dataLayer || [];function gtag(){dataLayer.push(arguments);}gtag("js", new Date());gtag("config", "G-7L1D36S69D");</script>Hello World!'));
-
-app.listen(port, () => console.log(`Discord app listening at http://localhost:${port}`));
